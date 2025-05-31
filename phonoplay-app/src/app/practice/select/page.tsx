@@ -3,7 +3,8 @@
 // This page allows users to select phonemes and start a practice session with matching words.
 
 import React, { useState } from 'react';
-import { allPhonemes, getWordsByPhonemes } from '@/lib/word-utils';
+import { allPhonemes } from '@/lib/word-utils';
+import { getWordsByPhonemesLLM, LLMWordEntry } from '@/lib/llmWordSelector';
 
 // --- Helper: List of all phonemes ---
 // You should have a utility that exports allPhonemes (string[])
@@ -33,8 +34,10 @@ export default function WordSelectionPage() {
   // State for selected phonemes
   const [selectedPhonemes, setSelectedPhonemes] = useState<string[]>([]);
 
-  // Get words that match selected phonemes
-  const matchingWords = getWordsByPhonemes(selectedPhonemes);
+  // State for loading and error (only used when starting practice)
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
 
   // Toggle phoneme selection
   function togglePhoneme(phoneme: string) {
@@ -45,10 +48,28 @@ export default function WordSelectionPage() {
     );
   }
 
-  // Handler for starting practice (for now, just alert)
-  function startPractice() {
-    // In a real app, you would navigate to the practice page and pass the selected words
-    alert(`Starting practice with ${matchingWords.length} words!`);
+  // Handler for starting practice: fetch words from LLM, save, and navigate
+  // Uses Next.js router for navigation (App Router best practice)
+  const router = require('next/navigation').useRouter();
+
+  async function startPractice() {
+    if (selectedPhonemes.length === 0) return;
+    setLoading(true);
+    setError(null);
+    try {
+      // Fetch words only when user clicks Start Practice
+      const words = await getWordsByPhonemesLLM(selectedPhonemes);
+      if (!words || words.length === 0) {
+        setError('No words found for your selection.');
+        setLoading(false);
+        return;
+      }
+      window.localStorage.setItem('phonoplay-session-words', JSON.stringify(words));
+      router.push('/practice/session');
+    } catch (e: any) {
+      setError(e.message || 'Failed to fetch words.');
+      setLoading(false);
+    }
   }
 
   return (
@@ -64,14 +85,19 @@ export default function WordSelectionPage() {
           />
         ))}
       </div>
+      {/* Show loading or error only when starting practice */}
       <div className="mb-4 text-center">
-        <span className="inline-block bg-gray-100 px-3 py-1 rounded-full text-gray-700">
-          {matchingWords.length} word{matchingWords.length !== 1 ? 's' : ''} match your selection
-        </span>
+        {loading && (
+          <span className="inline-block bg-yellow-100 px-3 py-1 rounded-full text-yellow-700">Loading words...</span>
+        )}
+        {error && (
+          <span className="inline-block bg-red-100 px-3 py-1 rounded-full text-red-700">{error}</span>
+        )}
       </div>
       <button
         className="w-full py-3 rounded bg-blue-600 text-white font-semibold text-lg disabled:bg-blue-300 transition-colors"
-        disabled={matchingWords.length === 0}
+        // Disable if loading or no phonemes selected
+        disabled={loading || selectedPhonemes.length === 0}
         onClick={startPractice}
       >
         Start Practice
