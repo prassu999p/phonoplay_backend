@@ -43,6 +43,7 @@ export default function PracticeSessionPage() {
   // Defensive: fallback if LLMWordEntry fields are missing
   const displayWord = currentWord.word || currentWord.text || '';
   const displayPhonemes = currentWord.phonemes || [];
+  const displayImagePath = currentWord.image_path || null;
 
   // Handlers for navigation
   function goNext() {
@@ -71,8 +72,8 @@ export default function PracticeSessionPage() {
       <div className="mb-2 text-gray-500 text-sm">
         Word {currentIdx + 1} of {total}
       </div>
-      {/* Use correct fields from LLMWordEntry for WordCard */}
-      <WordCard word={displayWord} phonemes={displayPhonemes} />
+      {/* Use correct fields from LLMWordEntry for WordCard, including image_path */}
+      <WordCard word={displayWord} phonemes={displayPhonemes} image_path={displayImagePath} />
       <div className="flex gap-2 my-4">
         <button
           className="px-4 py-2 rounded bg-gray-200 text-gray-700 disabled:opacity-50"
