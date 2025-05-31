@@ -22,7 +22,7 @@ coverage/
 # Environment variables
 .env
 .env.*.local
-.env.local
+!.env.local  # Allow .env.local in project root
 .env.development.local
 .env.test.local
 .env.production.local

@@ -1,0 +1,890 @@
+{
+  "timestamp": "2025-05-31T03:09:18.552Z",
+  "bucket": "phonic-images",
+  "successful": 147,
+  "failed": 0,
+  "files": [
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/animal.webp",
+      "fileName": "animal.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/animal.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/apple.webp",
+      "fileName": "apple.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/apple.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/bag.webp",
+      "fileName": "bag.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/bag.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/ball.webp",
+      "fileName": "ball.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/ball.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/banana.webp",
+      "fileName": "banana.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/banana.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/bat.webp",
+      "fileName": "bat.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/bat.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/bear.webp",
+      "fileName": "bear.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/bear.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/beat.webp",
+      "fileName": "beat.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/beat.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/bed.webp",
+      "fileName": "bed.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/bed.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/belt.webp",
+      "fileName": "belt.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/belt.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/bent.webp",
+      "fileName": "bent.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/bent.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/big.webp",
+      "fileName": "big.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/big.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/bit.webp",
+      "fileName": "bit.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/bit.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/black.webp",
+      "fileName": "black.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/black.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/boat.webp",
+      "fileName": "boat.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/boat.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/book.webp",
+      "fileName": "book.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/book.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/bread.webp",
+      "fileName": "bread.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/bread.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/brother.webp",
+      "fileName": "brother.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/brother.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/bump.webp",
+      "fileName": "bump.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/bump.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/bunny.webp",
+      "fileName": "bunny.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/bunny.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/cake.webp",
+      "fileName": "cake.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/cake.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/camp.webp",
+      "fileName": "camp.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/camp.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/can.webp",
+      "fileName": "can.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/can.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/candy.webp",
+      "fileName": "candy.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/candy.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/cat.webp",
+      "fileName": "cat.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/cat.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/chair.webp",
+      "fileName": "chair.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/chair.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/cherry.webp",
+      "fileName": "cherry.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/cherry.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/circle.webp",
+      "fileName": "circle.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/circle.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/coat.webp",
+      "fileName": "coat.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/coat.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/cookie.webp",
+      "fileName": "cookie.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/cookie.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/cop.webp",
+      "fileName": "cop.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/cop.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/cup.webp",
+      "fileName": "cup.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/cup.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/did.webp",
+      "fileName": "did.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/did.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/dig.webp",
+      "fileName": "dig.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/dig.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/doctor.webp",
+      "fileName": "doctor.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/doctor.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/dog.webp",
+      "fileName": "dog.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/dog.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/donut.webp",
+      "fileName": "donut.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/donut.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/dot.webp",
+      "fileName": "dot.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/dot.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/duck.webp",
+      "fileName": "duck.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/duck.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/dump.webp",
+      "fileName": "dump.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/dump.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/family.webp",
+      "fileName": "family.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/family.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/fan.webp",
+      "fileName": "fan.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/fan.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/father.webp",
+      "fileName": "father.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/father.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/felt.webp",
+      "fileName": "felt.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/felt.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/fig.webp",
+      "fileName": "fig.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/fig.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/fish.webp",
+      "fileName": "fish.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/fish.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/fit.webp",
+      "fileName": "fit.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/fit.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/flower.webp",
+      "fileName": "flower.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/flower.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/food.webp",
+      "fileName": "food.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/food.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/frog.webp",
+      "fileName": "frog.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/frog.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/fun.webp",
+      "fileName": "fun.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/fun.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/funny.webp",
+      "fileName": "funny.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/funny.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/gap.webp",
+      "fileName": "gap.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/gap.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/goat.webp",
+      "fileName": "goat.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/goat.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/golf.webp",
+      "fileName": "golf.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/golf.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/got.webp",
+      "fileName": "got.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/got.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/green.webp",
+      "fileName": "green.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/green.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/happy.webp",
+      "fileName": "happy.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/happy.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/hat.webp",
+      "fileName": "hat.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/hat.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/heart.webp",
+      "fileName": "heart.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/heart.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/heat.webp",
+      "fileName": "heat.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/heat.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/hit.webp",
+      "fileName": "hit.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/hit.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/hog.webp",
+      "fileName": "hog.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/hog.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/hop.webp",
+      "fileName": "hop.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/hop.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/horse.webp",
+      "fileName": "horse.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/horse.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/house.webp",
+      "fileName": "house.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/house.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/jump.webp",
+      "fileName": "jump.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/jump.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/kid.webp",
+      "fileName": "kid.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/kid.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/king.webp",
+      "fileName": "king.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/king.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/kit.webp",
+      "fileName": "kit.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/kit.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/kitten.webp",
+      "fileName": "kitten.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/kitten.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/lamp.webp",
+      "fileName": "lamp.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/lamp.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/lap.webp",
+      "fileName": "lap.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/lap.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/large.webp",
+      "fileName": "large.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/large.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/light.webp",
+      "fileName": "light.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/light.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/lion.webp",
+      "fileName": "lion.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/lion.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/little.webp",
+      "fileName": "little.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/little.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/lizard.webp",
+      "fileName": "lizard.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/lizard.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/log.webp",
+      "fileName": "log.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/log.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/man.webp",
+      "fileName": "man.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/man.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/map.webp",
+      "fileName": "map.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/map.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/meat.webp",
+      "fileName": "meat.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/meat.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/melt.webp",
+      "fileName": "melt.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/melt.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/milk.webp",
+      "fileName": "milk.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/milk.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/monkey.webp",
+      "fileName": "monkey.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/monkey.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/mop.webp",
+      "fileName": "mop.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/mop.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/mother.webp",
+      "fileName": "mother.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/mother.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/mouse.webp",
+      "fileName": "mouse.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/mouse.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/nag.webp",
+      "fileName": "nag.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/nag.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/neat.webp",
+      "fileName": "neat.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/neat.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/not.webp",
+      "fileName": "not.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/not.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/orange.webp",
+      "fileName": "orange.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/orange.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/other.webp",
+      "fileName": "other.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/other.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/pan.webp",
+      "fileName": "pan.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/pan.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/party.webp",
+      "fileName": "party.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/party.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/people.webp",
+      "fileName": "people.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/people.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/pig.webp",
+      "fileName": "pig.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/pig.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/pit.webp",
+      "fileName": "pit.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/pit.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/pizza.webp",
+      "fileName": "pizza.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/pizza.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/pop.webp",
+      "fileName": "pop.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/pop.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/pot.webp",
+      "fileName": "pot.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/pot.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/pup.webp",
+      "fileName": "pup.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/pup.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/puppy.webp",
+      "fileName": "puppy.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/puppy.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/purple.webp",
+      "fileName": "purple.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/purple.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/rabbit.webp",
+      "fileName": "rabbit.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/rabbit.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/rag.webp",
+      "fileName": "rag.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/rag.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/rat.webp",
+      "fileName": "rat.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/rat.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/red.webp",
+      "fileName": "red.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/red.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/rent.webp",
+      "fileName": "rent.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/rent.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/ring.webp",
+      "fileName": "ring.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/ring.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/room.webp",
+      "fileName": "room.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/room.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/run.webp",
+      "fileName": "run.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/run.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/school.webp",
+      "fileName": "school.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/school.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/seat.webp",
+      "fileName": "seat.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/seat.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/sent.webp",
+      "fileName": "sent.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/sent.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/ship.webp",
+      "fileName": "ship.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/ship.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/silly.webp",
+      "fileName": "silly.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/silly.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/sing.webp",
+      "fileName": "sing.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/sing.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/sister.webp",
+      "fileName": "sister.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/sister.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/sit.webp",
+      "fileName": "sit.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/sit.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/small.webp",
+      "fileName": "small.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/small.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/smell.webp",
+      "fileName": "smell.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/smell.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/spooky.webp",
+      "fileName": "spooky.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/spooky.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/spring.webp",
+      "fileName": "spring.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/spring.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/square.webp",
+      "fileName": "square.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/square.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/summer.webp",
+      "fileName": "summer.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/summer.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/sun.webp",
+      "fileName": "sun.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/sun.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/super.webp",
+      "fileName": "super.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/super.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/table.webp",
+      "fileName": "table.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/table.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/tag.webp",
+      "fileName": "tag.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/tag.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/tap.webp",
+      "fileName": "tap.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/tap.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/tent.webp",
+      "fileName": "tent.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/tent.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/test.jpg",
+      "fileName": "test.jpg",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/test.jpg",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/those.webp",
+      "fileName": "those.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/those.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/tiger.webp",
+      "fileName": "tiger.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/tiger.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/toad.webp",
+      "fileName": "toad.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/toad.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/top.webp",
+      "fileName": "top.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/top.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/tree.webp",
+      "fileName": "tree.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/tree.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/under.webp",
+      "fileName": "under.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/under.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/van.webp",
+      "fileName": "van.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/van.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/wag.webp",
+      "fileName": "wag.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/wag.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/water.webp",
+      "fileName": "water.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/water.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/went.webp",
+      "fileName": "went.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/went.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/white.webp",
+      "fileName": "white.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/white.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/wing.webp",
+      "fileName": "wing.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/wing.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/winter.webp",
+      "fileName": "winter.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/winter.webp",
+      "success": true
+    },
+    {
+      "originalPath": "/Users/prasanthp/Documents/Work/Git/phonoplay_backend/phonoplay-app/public/img/yellow.webp",
+      "fileName": "yellow.webp",
+      "publicUrl": "https://mkuquzgcvktcfhgagoec.supabase.co/storage/v1/object/public/phonic-images/words/yellow.webp",
+      "success": true
+    }
+  ]
+}
