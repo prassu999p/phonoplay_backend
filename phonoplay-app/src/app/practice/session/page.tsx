@@ -9,10 +9,40 @@ import { WordCard } from '@/components/words/WordCard';
 export default function PracticeSessionPage() {
   // State to track which word we're on
   const [currentIdx, setCurrentIdx] = useState(0);
-  // For now, use all words (later: get from selection)
-  const words: Word[] = allWords;
-  const total = words.length;
-  const currentWord = words[currentIdx];
+  // State for the session word list
+  const [sessionWords, setSessionWords] = useState<Word[] | null>(null);
+  // State for error
+  const [error, setError] = useState<string | null>(null);
+
+  // On mount, load the word list from localStorage
+  React.useEffect(() => {
+    try {
+      const data = window.localStorage.getItem('phonoplay-session-words');
+      if (data) {
+        setSessionWords(JSON.parse(data));
+      } else {
+        setError('No practice session found. Please start a new session.');
+      }
+    } catch (e) {
+      setError('Failed to load session words.');
+    }
+  }, []);
+
+  // If error, show message
+  if (error) {
+    return <div className="p-6 text-center text-red-600">{error}</div>;
+  }
+
+  // If not loaded yet, show loading
+  if (!sessionWords) {
+    return <div className="p-6 text-center">Loading session...</div>;
+  }
+
+  const total = sessionWords.length;
+  const currentWord = sessionWords[currentIdx];
+  // Defensive: fallback if LLMWordEntry fields are missing
+  const displayWord = currentWord.word || currentWord.text || '';
+  const displayPhonemes = currentWord.phonemes || [];
 
   // Handlers for navigation
   function goNext() {
@@ -27,6 +57,11 @@ export default function PracticeSessionPage() {
     alert('Recording feature coming soon!');
   }
 
+  // If finished all words, show session complete
+  if (currentIdx >= total) {
+    return <div className="p-6 text-center text-green-700 font-bold">Session Complete! 🎉</div>;
+  }
+
   if (!currentWord) {
     return <div className="p-6 text-center">No words available for practice.</div>;
   }
@@ -36,7 +71,8 @@ export default function PracticeSessionPage() {
       <div className="mb-2 text-gray-500 text-sm">
         Word {currentIdx + 1} of {total}
       </div>
-      <WordCard word={currentWord.text} phonemes={currentWord.phonemes} />
+      {/* Use correct fields from LLMWordEntry for WordCard */}
+      <WordCard word={displayWord} phonemes={displayPhonemes} />
       <div className="flex gap-2 my-4">
         <button
           className="px-4 py-2 rounded bg-gray-200 text-gray-700 disabled:opacity-50"

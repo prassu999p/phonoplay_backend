@@ -26,8 +26,8 @@ export async function POST(req: NextRequest) {
   }
 
   // 1. Use OpenRouter LLM to suggest words
-  // IMPORTANT: Instruct the LLM to output ONLY a comma-separated list, no numbers or extra text, for reliable parsing.
-  const prompt = `List 10 simple, child-friendly English words that use these phonemes: ${phonemes.join(', ')}. Output ONLY a comma-separated list of the words, with no numbering, no dashes, no explanations, and no extra text.`;
+  // IMPORTANT: Instruct the LLM to output ONLY a comma-separated list, no numbers or extra text, and NO DUPLICATES, for reliable parsing.
+  const prompt = `List 10 simple, child-friendly English words that use these phonemes: ${phonemes.join(', ')}. Output ONLY a comma-separated list of the words, with no numbering, no dashes, no explanations, and no extra text. Do not repeat any word.`;
 
   // Log the model and prompt for debugging
   console.log('[LLM] Using model:', model);
@@ -57,9 +57,16 @@ export async function POST(req: NextRequest) {
     text = data.choices?.[0]?.message?.content || '';
     // Log the raw LLM response
     console.log('[LLM] Raw response text:', text);
-    llmWords = text.split(',').map((w: string) => w.trim().toLowerCase()).filter(Boolean);
+    // Parse, deduplicate, and filter for English-only words
+    llmWords = text
+      .split(',')
+      .map((w: string) => w.trim().toLowerCase())
+      // Remove non-English words (keep only a-z, hyphens, apostrophes)
+      .filter((w: string) => /^[a-z\-']+$/.test(w))
+      // Deduplicate while preserving order
+      .filter((w: string, idx: number, arr: string[]) => arr.indexOf(w) === idx && w.length > 0);
     // Log the parsed word array
-    console.log('[LLM] Parsed words:', llmWords);
+    console.log('[LLM] Parsed and filtered words:', llmWords);
   } catch (error) {
     console.error('[LLM] Error fetching from OpenRouter:', error);
     return NextResponse.json({ error: 'Failed to fetch from LLM', details: String(error) }, { status: 500 });
