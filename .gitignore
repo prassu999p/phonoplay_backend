@@ -1,1 +1,93 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
+
+# Build output
+.next/
+.nuxt/
+dist/
+build/
+out/
+
+# Testing
+coverage/
+.nyc_output/
+
+# Environment variables
+.env
+.env.*.local
+!.env.local  # Allow .env.local in project root
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Debug logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Editor directories and files
+.idea/
+.vscode/*
+!.vscode/extensions.json
+*.sublime-*
+*.sublime-workspace
+
+# System Files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Local development
+.cache/
+.temp/
+.tmp/
 img/*
+# Next.js specific
+.vercel
+.netlify
+
+# Production
+build/
+.next/
+
+# TypeScript
+*.tsbuildinfo
+next-env.d.ts
+
+# Debug
+*.log
+
+# Local environment files
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Vercel
+.vercel/
+
+# Misc
+*.pem
+*.p12
+*.key
+*.mobileprovision
+*.orig.*
+
+# Local development
+*.local
+
+# Project specific exclusions
+/phonoplay-app/node_modules/
+/phonoplay-app/.next/
+/phonoplay-app/out/
+/phonoplay-app/build/
+/phonoplay-app/public/img/*
+
