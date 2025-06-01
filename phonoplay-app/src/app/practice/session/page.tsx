@@ -5,13 +5,12 @@
 import React, { useState, useRef, useEffect } from 'react';
 
 import { Confetti } from '@/components/ui/confetti';
-import { allWords, Word } from '@/lib/word-utils';
-import { WordCard } from '@/components/words/WordCard';
+import { Word } from '@/lib/word-utils';
 import { WordImage } from '@/lib/word-images/WordImageComponent';
 import { FiMic, FiStopCircle, FiVolume2 } from 'react-icons/fi';
 
 export default function PracticeSessionPage() {
-  const confettiRef = useRef(null);
+  const confettiRef = useRef<{ fire: () => void } | null>(null);
   // --- All hooks at the top! ---
   const [currentIdx, setCurrentIdx] = useState(0);
   const [sessionWords, setSessionWords] = useState<Word[] | null>(null);
@@ -27,7 +26,7 @@ export default function PracticeSessionPage() {
   const [childName] = useState('Alex'); // Only declare once, at the top
   const mediaRecorderRef = React.useRef<MediaRecorder | null>(null);
   const audioChunksRef = React.useRef<Blob[]>([]);
-  const convaiRef = React.useRef<any>(null); // Only declare once, at the top
+  const convaiRef = React.useRef<HTMLElement | null>(null); // Only declare once, at the top
 
   // Dynamically load the ElevenLabs Convai script once
   React.useEffect(() => {
@@ -54,25 +53,35 @@ export default function PracticeSessionPage() {
         setError('No practice session found. Please start a new session.');
       }
     } catch (e) {
-      setError('Failed to load session words.');
+      setError(`Failed to load session words: ${e instanceof Error ? e.message : String(e)}`);
     }
   }, []);
 
   // Confetti effect on correct answer
   useEffect(() => {
     if (feedback === 'Great job!' && confettiRef.current) {
-      // @ts-ignore
       confettiRef.current.fire();
     }
   }, [feedback]);
 
+  // Effect for session completion confetti
+  useEffect(() => {
+    if (sessionWords && currentIdx >= sessionWords.length && sessionWords.length > 0 && confettiRef.current) {
+      confettiRef.current.fire();
+    }
+  }, [currentIdx, sessionWords]); // Depends on currentIdx and sessionWords to re-evaluate
+
   const total = sessionWords?.length || 0;
   const currentWord = sessionWords ? sessionWords[currentIdx] : undefined;
-  // Defensive: fallback if LLMWordEntry fields are missing
-  // Use optional chaining and fallback for missing properties
-  const displayWord = currentWord ? ((currentWord as any).word || (currentWord as any).text || '') : '';
-  const displayPhonemes = currentWord ? ((currentWord as any).phonemes || []) : [];
-  const displayImagePath = currentWord ? ((currentWord as any).image_path || null) : null;
+  // Log current word for debugging
+  console.log('Current word:', currentWord);
+  
+  // Defensive: fallback if Word fields are missing
+  // FIXED: Use the correct property name 'word' instead of 'text'
+  const displayWord = currentWord?.word || '';
+  
+  // FIXED: Use the image_path from the word object if available
+  const displayImagePath = currentWord?.image_path;
 
   // Track the latest displayWord to avoid stale closure in callbacks
   const displayWordRef = useRef(displayWord);
@@ -82,7 +91,7 @@ export default function PracticeSessionPage() {
 
   // Handlers for navigation
   function goNext() {
-    setCurrentIdx((idx) => idx + 1); // allow increment past last word to trigger session complete
+    setCurrentIdx((idx) => idx + 1); 
     setFeedback(null);
     setTranscription(null);
     setRecordedUrl(null);
@@ -112,7 +121,7 @@ export default function PracticeSessionPage() {
         setAudioError('No audio returned.');
       }
     } catch (e) {
-      setAudioError('Failed to fetch audio.');
+      setAudioError(`Failed to fetch audio: ${e instanceof Error ? e.message : String(e)}`);
     } finally {
       setAudioLoading(false);
     }
@@ -132,7 +141,7 @@ export default function PracticeSessionPage() {
         audioChunksRef.current = [];
         setFeedback(null);
         setTranscription(null);
-        setRecordedUrl(null); // Clear previous recording
+        setRecordedUrl(null); 
         // When data is available, push it to our array
         mediaRecorder.ondataavailable = (event) => {
           if (event.data.size > 0) {
@@ -157,12 +166,11 @@ export default function PracticeSessionPage() {
             const data = await res.json();
             if (data.text) {
               setTranscription(data.text);
-              // Improved matching logic for kids: forgiving of punctuation, case, and extra words
               function normalize(str: string) {
                 return str
                   .toLowerCase()
-                  .replace(/[.,/#!$%^&*;:{}=\-_`~()\?\"]/g, "") // Remove punctuation
-                  .replace(/\s{2,}/g, " ") // Remove extra spaces
+                  .replace(/[.,/#!$%^&*;:{}=\-_`~()\?\"]/g, "") 
+                  .replace(/\s{2,}/g, " ") 
                   .trim();
               }
               const heard = normalize(data.text);
@@ -180,7 +188,7 @@ export default function PracticeSessionPage() {
               setFeedback('Sorry, could not understand. Please try again.');
             }
           } catch (err) {
-            setFeedback('Error transcribing audio. Please try again.');
+            setFeedback(`Error transcribing audio: ${err instanceof Error ? err.message : String(err)}. Please try again.`);
           }
         };
         // Start recording!
@@ -194,7 +202,7 @@ export default function PracticeSessionPage() {
           }
         }, 3000);
       } catch (err) {
-        setRecordError('Could not access microphone. Please allow permission.');
+        setRecordError(`Could not access microphone: ${err instanceof Error ? err.message : String(err)}. Please allow permission.`);
       }
     } else {
       // Manual stop (should rarely be needed)
@@ -206,17 +214,27 @@ export default function PracticeSessionPage() {
     }
   }
 
-  // If finished all words, show session complete
-  if (currentIdx >= total) {
-    useEffect(() => {
-      if (currentIdx >= total && confettiRef.current) {
-        // @ts-ignore
-        confettiRef.current.fire();
-      }
-    }, [currentIdx, total]);
+  // --- Conditional Rendering Logic ---
+
+  // 1. Handle general errors
+  if (error) {
+    return <div className="text-red-500 p-4 text-center">Error: {error}</div>;
+  }
+
+  // 2. Handle loading state or no session words
+  if (!sessionWords) {
+    return <div className="p-4 text-center">Loading session...</div>;
+  }
+  if (sessionWords.length === 0) {
+    return <div className="p-4 text-center">No words in this session. Please select phonemes and start a new session.</div>;
+  }
+
+  // 3. Handle session completion
+  if (currentIdx >= total && total > 0) {
+    // The useEffect for session completion confetti is now at the top level.
     return (
       <div className="relative min-h-screen flex flex-col items-center justify-center bg-white">
-        <Confetti manualstart ref={confettiRef} className="absolute left-0 top-0 w-full h-full pointer-events-none z-50" />
+        <Confetti ref={confettiRef} manualstart className="absolute left-0 top-0 w-full h-full pointer-events-none z-50" />
         <div className="relative z-10 flex flex-col items-center justify-center gap-8 p-8">
           <div className="text-3xl font-extrabold text-green-700 mb-2">Session Complete! 🎉</div>
           <div className="text-lg text-gray-700 mb-4">Great job practicing! You finished the session.</div>
@@ -232,21 +250,29 @@ export default function PracticeSessionPage() {
     );
   }
 
+  // 4. Main Practice UI
+  // Ensure currentWord is available before rendering main practice UI
   if (!currentWord) {
-    return <div className="p-6 text-center">No words available for practice.</div>;
+    return <div className="p-6 text-center">Loading word...</div>; // Or some other placeholder
   }
 
   return (
     <div className="relative min-h-screen w-full">
       <Confetti ref={confettiRef} manualstart className="absolute left-0 top-0 w-full h-full pointer-events-none z-50" />
-      <main className="min-h-screen flex flex-col items-center justify-center bg-white">
-        <div className="w-full max-w-xl mx-auto flex justify-between items-center px-4 pt-4">
-          <div />
-          {/* Placeholder for user avatar/menu */}
+      <main className="min-h-screen flex flex-col items-center justify-center bg-white px-4 py-8">
+        {/* Display general error if it exists (though handled by early return, good for robustness) */}
+        {/* {error && <p className="text-red-500 text-center mb-4">Error: {error}</p>} Already handled by early return */}
+
+        {/* Display audio error if it exists */}
+        {audioError && <p className="text-red-500 text-center mb-2">Audio Error: {audioError}</p>}
+
+        <div className="w-full max-w-xl mx-auto flex justify-between items-center pt-4">
+          <div /> {/* Placeholder for left side if needed */}
           <div className="flex items-center gap-2">
-            <span className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center text-gray-500 font-bold">?</span>
+            <span className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center text-gray-500 font-bold">?</span> {/* User avatar/menu placeholder */}
           </div>
         </div>
+
         <div className="flex flex-col items-center mt-2 mb-8 w-full">
           <div className="mb-3 mt-2 text-2xl font-bold text-gray-800 text-center">Practice Time!</div>
           <div className="bg-gray-50 rounded-3xl shadow-lg px-8 py-10 flex flex-col items-center w-full max-w-xl">
@@ -258,8 +284,9 @@ export default function PracticeSessionPage() {
             </div>
           </div>
         </div>
+
         <div className="flex flex-row items-center justify-center gap-8 mb-6 w-full">
-          {/* Record Button with tooltip */}
+          {/* Record Button */}
           <div className="flex flex-col items-center group">
             <button
               className={`w-14 h-14 rounded-full flex items-center justify-center text-white text-3xl shadow transition-all duration-150 ${isRecording ? 'bg-pink-500 animate-pulse' : 'bg-pink-400 hover:bg-pink-500'}`}
@@ -269,10 +296,9 @@ export default function PracticeSessionPage() {
             >
               {isRecording ? <FiStopCircle /> : <FiMic />}
             </button>
-            {/* Tooltip */}
             <span className="mt-1 text-sm text-gray-600 group-hover:text-pink-500 transition-colors duration-150">Record</span>
           </div>
-          {/* Play/Listen Button with tooltip */}
+          {/* Play/Listen Button */}
           <div className="flex flex-col items-center group">
             <button
               className="w-14 h-14 rounded-full flex items-center justify-center bg-gray-200 hover:bg-gray-300 text-gray-700 text-3xl shadow"
@@ -283,12 +309,13 @@ export default function PracticeSessionPage() {
             >
               <FiVolume2 />
             </button>
-            {/* Tooltip */}
             <span className="mt-1 text-sm text-gray-600 group-hover:text-blue-500 transition-colors duration-150">Listen</span>
           </div>
         </div>
-        {/* Feedback Checkmark or Error */}
-        <div className="flex flex-col items-center mb-4">
+
+        {/* Transcription & Feedback Area */}
+        <div className="flex flex-col items-center mb-4 min-h-[60px]"> {/* Added min-height to prevent layout shift */}
+          {transcription && <p className="text-gray-600 text-lg mb-1 text-center">I heard: &quot;{transcription}&quot;</p>}
           {feedback && (
             <span className={`w-full flex flex-col items-center mb-2`}>
               {feedback === 'Great job!' ? (
@@ -300,16 +327,18 @@ export default function PracticeSessionPage() {
             </span>
           )}
           {recordError && (
-            <span className="text-red-500 text-sm mb-2">{recordError}</span>
+            <span className="text-red-500 text-sm mb-2 text-center">{recordError}</span>
           )}
         </div>
+
         {/* Progress Bar */}
         <div className="w-full max-w-xl mx-auto h-2 bg-gray-200 rounded-full overflow-hidden mb-8">
           <div
             className="h-full bg-pink-400 transition-all duration-500"
-            style={{ width: `${((currentIdx + 1) / total) * 100}%` }}
+            style={{ width: `${total > 0 ? ((currentIdx + 1) / total) * 100 : 0}%` }} // Avoid division by zero
           />
         </div>
+
         {/* Navigation Buttons */}
         <div className="flex justify-between w-full mt-4 gap-4 max-w-xl mx-auto">
           <button
@@ -322,11 +351,13 @@ export default function PracticeSessionPage() {
           <button
             className="px-6 py-3 rounded-lg bg-pink-500 text-white font-medium text-base shadow"
             onClick={goNext}
+            disabled={currentIdx >= total -1 && total > 0} // Disable if it's the last word
           >
             Next Word →
           </button>
         </div>
       </main>
+
       {/* ElevenLabs Convai Widget for conversational feedback */}
       <div className="w-full flex flex-col items-center my-4">
         <div>
@@ -334,22 +365,17 @@ export default function PracticeSessionPage() {
             ref={convaiRef}
             agent-id="agent_01jwkam9bke6msyrfezbhhbpf7"
             dynamic-variables={JSON.stringify({ word: displayWord, child_name: childName })}
-            context={`Help ${childName} pronounce the word \"${displayWord}\". Listen and give friendly feedback. If the child struggles, guide them with encouragement and tips.`}
+            context={`Help ${childName} pronounce the word &quot;${displayWord}&quot;. Listen and give friendly feedback. If the child struggles, guide them with encouragement and tips.`}
           ></elevenlabs-convai>
         </div>
       </div>
+
       {/* Audio playback for recorded audio */}
       {recordedUrl && !isRecording && (
-        <audio src={recordedUrl} controls className="mt-2" />
+        <audio src={recordedUrl || undefined} controls className="mt-2" />
       )}
       {/* TTS playback (hidden, just triggers when needed) */}
-      {audioUrl && <audio src={audioUrl} autoPlay onEnded={() => setAudioUrl(null)} />}
+      {audioUrl && <audio src={audioUrl || undefined} autoPlay onEnded={() => setAudioUrl(null)} />}
     </div>
   );
 }
-
-// - Navigation buttons let you move through the list
-// - Record button is a stub for now
-// - Feedback area is a placeholder
-//
-// Next: connect to word selection, implement audio recording, and add feedback logic

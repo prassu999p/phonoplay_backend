@@ -2,7 +2,7 @@
 // This file is required for shadcn/ui components (e.g., Button) to work.
 
 // Combines class names conditionally (like clsx or classnames)
-export function cn(...args: any[]): string {
+export function cn(...args: (string | Record<string, boolean | undefined> | null | undefined)[]): string {
   return args
     .flat(Infinity)
     .filter(Boolean)
