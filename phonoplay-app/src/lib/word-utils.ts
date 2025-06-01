@@ -7,16 +7,18 @@ export const allPhonemes: string[] = [
 
 // Example word list (replace with your real data)
 export interface Word {
-  text: string;
+  id?: number;
+  word: string;  // Changed from 'text' to 'word' to match actual data
   phonemes: string[];
+  image_path?: string;  // Added to match actual data
 }
 
 export const allWords: Word[] = [
-  { text: 'cat', phonemes: ['k', 'a', 't'] },
-  { text: 'dog', phonemes: ['d', 'o', 'g'] },
-  { text: 'sun', phonemes: ['s', 'u', 'n'] },
-  { text: 'red', phonemes: ['r', 'e', 'd'] },
-  { text: 'milk', phonemes: ['m', 'i', 'l', 'k'] },
+  { id: 1, word: 'cat', phonemes: ['k', 'a', 't'], image_path: 'words/cat.webp' },
+  { id: 2, word: 'dog', phonemes: ['d', 'o', 'g'], image_path: 'words/dog.webp' },
+  { id: 3, word: 'sun', phonemes: ['s', 'u', 'n'], image_path: 'words/sun.webp' },
+  { id: 4, word: 'red', phonemes: ['r', 'e', 'd'], image_path: 'words/red.webp' },
+  { id: 5, word: 'milk', phonemes: ['m', 'i', 'l', 'k'], image_path: 'words/milk.webp' },
   // Add more words as needed
 ];
 

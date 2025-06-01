@@ -3,9 +3,10 @@
 // This page allows users to select phonemes and start a practice session with matching words.
 
 import React, { useState, useEffect } from 'react';
-import { getWordsByPhonemesLLM, LLMWordEntry } from '@/lib/llmWordSelector';
+import { getWordsByPhonemesLLM } from '@/lib/llmWordSelector'; // Removed LLMWordEntry
 import { getEmojiForExample } from './emojiMap';
 import { createClient } from '@supabase/supabase-js';
+import { useRouter } from 'next/navigation'; // Added for router
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -18,14 +19,15 @@ const supabase = createClient(
 
 // --- PhonemeChip Component ---
 // This component represents a selectable phoneme chip/button with icon, label, and checkbox
-const PHONEME_EMOJIS: Record<string, string> = {
-  'Aa': '😄🍎',
-  'Bb': '💚🦄',
-  'Cc': '⭐🐱',
-  'Ch': '🎵♦️',
-  'Sh': '⚡🐟',
-  'Th': '🟢👍',
-};
+
+// Definition for Phoneme data structure from Supabase
+interface Phoneme {
+  id: number;
+  phoneme: string;
+  example: string;
+  group: string;
+  created_at: string;
+}
 
 function PhonemeChip({ phoneme, selected, onClick, example }: {
   phoneme: string;
@@ -59,7 +61,7 @@ export default function WordSelectionPage() {
   const [error, setError] = useState<string | null>(null);
 
   // State for fetched phonemes
-  const [groupedPhonemes, setGroupedPhonemes] = useState<Record<string, any[]> | null>(null);
+  const [groupedPhonemes, setGroupedPhonemes] = useState<Record<string, Phoneme[]> | null>(null);
   const [fetchingPhonemes, setFetchingPhonemes] = useState(true);
 
   // Fetch phonemes from Supabase and group by 'group'
@@ -73,8 +75,8 @@ export default function WordSelectionPage() {
         return;
       }
       // Group by 'group' field
-      const grouped: Record<string, any[]> = {};
-      data.forEach((row) => {
+      const grouped: Record<string, Phoneme[]> = {};
+      data.forEach((row: Phoneme) => {
         if (!grouped[row.group]) grouped[row.group] = [];
         grouped[row.group].push(row);
       });
@@ -95,7 +97,7 @@ export default function WordSelectionPage() {
 
   // Handler for starting practice: fetch words from LLM, save, and navigate
   // Uses Next.js router for navigation (App Router best practice)
-  const router = require('next/navigation').useRouter();
+  const router = useRouter();
 
   async function startPractice() {
     if (selectedPhonemes.length === 0) return;
@@ -111,8 +113,12 @@ export default function WordSelectionPage() {
       }
       window.localStorage.setItem('phonoplay-session-words', JSON.stringify(words));
       router.push('/practice/session');
-    } catch (e: any) {
-      setError(e.message || 'Failed to fetch words.');
+    } catch (e: unknown) {
+      if (e instanceof Error) {
+        setError(e.message || 'Failed to fetch words.');
+      } else {
+        setError('An unknown error occurred while fetching words.');
+      }
       setLoading(false);
     }
   }
@@ -139,7 +145,7 @@ export default function WordSelectionPage() {
             <div key={group} className="mb-6 w-full">
               <h3 className="text-lg font-semibold mb-2 capitalize text-gray-700">{group.replace('_', ' ')}</h3>
               <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-                {(phonemeList as any[]).map((item) => (
+                {phonemeList.map((item: Phoneme) => (
                   <PhonemeChip
                     key={item.phoneme}
                     phoneme={item.phoneme}

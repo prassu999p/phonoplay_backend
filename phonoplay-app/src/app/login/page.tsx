@@ -118,7 +118,7 @@ export default function LoginPage() {
               {loading ? (
                 <span>Loading...</span>
               ) : tab === 'login' ? (
-                <span className="flex items-center justify-center gap-2">→ Let's Begin! <span>🐣</span></span>
+                <span className="flex items-center justify-center gap-2">→ Let&apos;s Begin! <span>🐣</span></span>
               ) : (
                 <span className="flex items-center justify-center gap-2">Sign Up <span>📝</span></span>
               )}

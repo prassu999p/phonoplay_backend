@@ -1,4 +1,5 @@
 import React from 'react';
+import Image from 'next/image';
 import { wordImageMap } from '@/data/wordImageMap';
 
 interface WordImageProps {
@@ -25,17 +26,17 @@ export const WordImage: React.FC<WordImageProps> = ({ word, image_path, classNam
     return <div className={`w-20 h-20 flex items-center justify-center bg-gray-200 rounded text-gray-400 ${className}`}>No image</div>;
   }
 
-  const handleError = (e: React.SyntheticEvent<HTMLImageElement>) => {
-    const target = e.currentTarget;
-    target.style.display = 'none';
-  };
+  // onError is handled differently with next/image, or can use onLoadingComplete
+  // For simplicity, removing custom handleError for now.
 
   return (
-    <img
+    <Image
       src={imageUrl}
       alt={word}
       className={`word-image ${className}`}
-      onError={handleError}
+      width={100} // Default width, adjust as needed
+      height={100} // Default height, adjust as needed
+      // onError could be implemented via onLoadingComplete or by checking if src is valid before rendering
     />
   );
 };
