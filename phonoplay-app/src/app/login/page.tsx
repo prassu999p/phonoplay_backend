@@ -22,7 +22,8 @@ export default function LoginPage() {
         setLoading(false);
         return;
       }
-      router.push('/');
+      // Redirect to practice/select instead of home page after successful login
+      router.push('/practice/select');
     } else {
       const { error } = await supabase.auth.signUp({ email, password });
       if (error) {
@@ -30,7 +31,8 @@ export default function LoginPage() {
         setLoading(false);
         return;
       }
-      router.push('/');
+      // Redirect to practice/select instead of home page after successful signup
+      router.push('/practice/select');
     }
     setLoading(false);
   }

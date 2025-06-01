@@ -1,8 +1,33 @@
+'use client';
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { supabase } from './login/supabaseClient';
 import Image from "next/image";
 
 export default function Home() {
+  const router = useRouter();
+  
+  useEffect(() => {
+    // Check authentication status and redirect accordingly
+    const checkAuth = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      
+      if (session) {
+        // User is logged in, redirect to practice selection page
+        router.push('/practice/select');
+      } else {
+        // User is not logged in, redirect to login page
+        router.push('/login');
+      }
+    };
+    
+    checkAuth();
+  }, [router]);
+  
+  // This is a loading state while checking auth
   return (
     <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
+
       <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
         <Image
           className="dark:invert"
