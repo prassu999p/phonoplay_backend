@@ -153,74 +153,101 @@ export default function PracticeSessionPage() {
   }
 
   return (
-    <main className="max-w-xl mx-auto p-4 flex flex-col items-center">
-      <div className="mb-2 text-gray-500 text-sm">
-        Word {currentIdx + 1} of {total}
-      </div>
-      {/* Use correct fields from LLMWordEntry for WordCard, including image_path */}
-      <WordCard word={displayWord} phonemes={displayPhonemes} image_path={displayImagePath} />
-
-      {/* ElevenLabs Convai Widget for conversational feedback */}
-      <div className="w-full flex flex-col items-center my-4">
-        <div>
-          <elevenlabs-convai
-            ref={convaiRef}
-            agent-id="agent_01jwkam9bke6msyrfezbhhbpf7"
-            dynamic-variables={JSON.stringify({ word: displayWord, child_name: childName })}
-            context={`Help ${childName} pronounce the word "${displayWord}". Listen and give friendly feedback.`}
-          ></elevenlabs-convai>
+    <main className="min-h-screen flex flex-col items-center justify-center bg-white">
+      <div className="w-full flex justify-between items-center px-8 pt-4">
+        <div />
+        {/* Placeholder for user avatar/menu */}
+        <div className="flex items-center gap-2">
+          <span className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center text-gray-500 font-bold">?</span>
         </div>
       </div>
-
-      <div className="flex gap-2 my-4">
-        <button
-          className="px-4 py-2 rounded bg-gray-200 text-gray-700 disabled:opacity-50"
-          onClick={goPrev}
-          disabled={currentIdx === 0}
-        >
-          Previous
-        </button>
-        <button
-          className="px-4 py-2 rounded bg-blue-600 text-white font-semibold disabled:bg-blue-300"
-          onClick={goNext}
-          disabled={currentIdx === total - 1}
-        >
-          Next
-        </button>
+      <div className="flex flex-col items-center mt-2 mb-8 w-full">
+        <div className="mb-3 mt-2 text-2xl font-bold text-gray-800 text-center">Practice Time!</div>
+        <div className="bg-gray-50 rounded-3xl shadow-lg px-10 py-10 flex flex-col items-center w-full max-w-2xl">
+          <div className="text-2xl font-bold text-gray-700 text-center mb-2" style={{ letterSpacing: 1 }}>{displayWord}</div>
+          <div className="flex flex-col items-center mb-6">
+            {displayImagePath && (
+              <img
+                src={displayImagePath}
+                alt={displayWord}
+                className="w-40 h-40 object-cover rounded-full border-4 border-white shadow-md mb-2"
+              />
+            )}
+          </div>
+          <div className="flex items-center justify-center gap-6 mb-6">
+            {/* Record Button */}
+            <button
+              className={`w-14 h-14 rounded-full flex items-center justify-center text-white text-2xl shadow transition-all duration-150
+                ${isRecording ? 'bg-pink-500 animate-pulse' : 'bg-pink-400 hover:bg-pink-500'}`}
+              onClick={handleRecord}
+              aria-label={isRecording ? 'Stop recording' : 'Start recording'}
+            >
+              <span className="material-icons">{isRecording ? 'stop' : 'mic'}</span>
+            </button>
+            {/* Repeat/Play Button */}
+            <button
+              className="w-14 h-14 rounded-full flex items-center justify-center bg-gray-200 hover:bg-gray-300 text-gray-700 text-2xl shadow"
+              onClick={handleReplay}
+              aria-label="Play word audio"
+              disabled={audioLoading}
+            >
+              <span className="material-icons">volume_up</span>
+            </button>
+          </div>
+          {/* Feedback Checkmark or Error */}
+          <div className="flex flex-col items-center mb-4">
+            {recordedUrl && !isRecording && (
+              <span className="w-14 h-14 flex items-center justify-center rounded-full bg-green-100 text-green-600 text-4xl mb-2">
+                ✓
+              </span>
+            )}
+            {recordError && (
+              <span className="text-red-500 text-sm mb-2">{recordError}</span>
+            )}
+          </div>
+          {/* Progress Bar */}
+          <div className="w-full h-2 rounded-full bg-gray-200 overflow-hidden mb-6">
+            <div
+              className="h-full bg-pink-400 transition-all duration-300"
+              style={{ width: `${((currentIdx + 1) / total) * 100}%` }}
+            ></div>
+          </div>
+          {/* Navigation Buttons */}
+          <div className="flex justify-between w-full mt-4 gap-4">
+            <button
+              className="px-6 py-3 rounded-lg bg-gray-100 text-gray-700 font-medium text-base shadow disabled:opacity-60"
+              onClick={goPrev}
+              disabled={currentIdx === 0}
+            >
+              ← Back
+            </button>
+            <button
+              className="px-6 py-3 rounded-lg bg-pink-600 text-white font-bold text-base shadow disabled:bg-pink-300 transition-colors"
+              onClick={goNext}
+              disabled={currentIdx === total - 1}
+            >
+              Next Word →
+            </button>
+          </div>
+        </div>
+        {/* ElevenLabs Convai Widget for conversational feedback */}
+        <div className="w-full flex flex-col items-center my-4">
+          <div>
+            <elevenlabs-convai
+              ref={convaiRef}
+              agent-id="agent_01jwkam9bke6msyrfezbhhbpf7"
+              dynamic-variables={JSON.stringify({ word: displayWord, child_name: childName })}
+              context={`Help ${childName} pronounce the word \"${displayWord}\". Listen and give friendly feedback. If the child struggles, guide them with encouragement and tips.`}
+            ></elevenlabs-convai>
+          </div>
+        </div>
       </div>
-      {/* Replay Button for TTS */}
-      <button
-        className="px-6 py-3 rounded bg-purple-600 text-white font-bold mt-2"
-        onClick={handleReplay}
-        disabled={audioLoading}
-      >
-        {audioLoading ? 'Loading...' : 'Replay'}
-      </button>
-      {/* Audio player and error state */}
-      {audioUrl && (
-        <audio src={audioUrl} controls autoPlay className="mt-2" />
-      )}
-      {audioError && (
-        <div className="mt-2 text-red-500">{audioError}</div>
-      )}
-      <button
-        className={`px-6 py-3 rounded font-bold mt-2 ${isRecording ? 'bg-red-600 text-white' : 'bg-green-600 text-white'}`}
-        onClick={handleRecord}
-      >
-        {isRecording ? 'Stop' : 'Record'}
-      </button>
-      {/* Show playback for the user's recording */}
-      {recordedUrl && (
+      {/* Audio playback for recorded audio */}
+      {recordedUrl && !isRecording && (
         <audio src={recordedUrl} controls className="mt-2" />
       )}
-      {/* Show error if recording fails */}
-      {recordError && (
-        <div className="mt-2 text-red-500">{recordError}</div>
-      )}
-      <div className="mt-4 text-gray-400">
-        {/* Placeholder for feedback */}
-        Feedback will appear here after you record.
-      </div>
+      {/* TTS playback (hidden, just triggers when needed) */}
+      {audioUrl && <audio src={audioUrl} autoPlay onEnded={() => setAudioUrl(null)} />}
     </main>
   );
 }

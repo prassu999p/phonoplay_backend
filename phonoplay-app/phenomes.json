@@ -1,0 +1,71 @@
+{
+    "consonants": [
+      {"phoneme": "B", "sound": "/b/", "example": "bat"},
+      {"phoneme": "C", "sound": "/k/", "example": "cat"},
+      {"phoneme": "D", "sound": "/d/", "example": "dog"},
+      {"phoneme": "F", "sound": "/f/", "example": "fish"},
+      {"phoneme": "G", "sound": "/g/", "example": "goat"},
+      {"phoneme": "H", "sound": "/h/", "example": "hat"},
+      {"phoneme": "J", "sound": "/j/", "example": "jam"},
+      {"phoneme": "K", "sound": "/k/", "example": "kite"},
+      {"phoneme": "L", "sound": "/l/", "example": "lamp"},
+      {"phoneme": "M", "sound": "/m/", "example": "man"},
+      {"phoneme": "N", "sound": "/n/", "example": "net"},
+      {"phoneme": "P", "sound": "/p/", "example": "pig"},
+      {"phoneme": "Q", "sound": "/kw/", "example": "queen"},
+      {"phoneme": "R", "sound": "/r/", "example": "rat"},
+      {"phoneme": "S", "sound": "/s/", "example": "sun"},
+      {"phoneme": "T", "sound": "/t/", "example": "top"},
+      {"phoneme": "V", "sound": "/v/", "example": "van"},
+      {"phoneme": "W", "sound": "/w/", "example": "wet"},
+      {"phoneme": "X", "sound": "/ks/", "example": "box"},
+      {"phoneme": "Y", "sound": "/y/", "example": "yes"},
+      {"phoneme": "Z", "sound": "/z/", "example": "zoo"}
+    ],
+    "short_vowels": [
+      {"phoneme": "A", "sound": "/æ/", "example": "apple"},
+      {"phoneme": "E", "sound": "/ɛ/", "example": "bed"},
+      {"phoneme": "I", "sound": "/ɪ/", "example": "pig"},
+      {"phoneme": "O", "sound": "/ɒ/", "example": "hot"},
+      {"phoneme": "U", "sound": "/ʌ/", "example": "cup"}
+    ],
+    "long_vowels": [
+      {"phoneme": "A", "sound": "/eɪ/", "example": "cake"},
+      {"phoneme": "E", "sound": "/iː/", "example": "feet"},
+      {"phoneme": "I", "sound": "/aɪ/", "example": "kite"},
+      {"phoneme": "O", "sound": "/oʊ/", "example": "boat"},
+      {"phoneme": "U", "sound": "/juː/", "example": "unicorn"}
+    ],
+    "digraphs": [
+      {"phoneme": "CH", "sound": "/ch/", "example": "chip"},
+      {"phoneme": "SH", "sound": "/sh/", "example": "ship"},
+      {"phoneme": "TH", "sound": "/θ/", "example": "thin"},
+      {"phoneme": "TH_voiced", "sound": "/ð/", "example": "this"},
+      {"phoneme": "WH", "sound": "/wh/", "example": "whale"},
+      {"phoneme": "PH", "sound": "/f/", "example": "phone"},
+      {"phoneme": "NG", "sound": "/ŋ/", "example": "ring"}
+    ],
+    "blends": [
+      {"phoneme": "BL", "example": "blue"},
+      {"phoneme": "CL", "example": "clap"},
+      {"phoneme": "FL", "example": "flag"},
+      {"phoneme": "GL", "example": "glue"},
+      {"phoneme": "PL", "example": "plant"},
+      {"phoneme": "BR", "example": "brick"},
+      {"phoneme": "CR", "example": "crab"},
+      {"phoneme": "DR", "example": "drum"},
+      {"phoneme": "FR", "example": "frog"},
+      {"phoneme": "GR", "example": "green"},
+      {"phoneme": "PR", "example": "prize"},
+      {"phoneme": "TR", "example": "tree"},
+      {"phoneme": "SK", "example": "skate"},
+      {"phoneme": "SL", "example": "slide"},
+      {"phoneme": "SM", "example": "smile"},
+      {"phoneme": "SN", "example": "snow"},
+      {"phoneme": "SP", "example": "spoon"},
+      {"phoneme": "ST", "example": "star"},
+      {"phoneme": "SW", "example": "swim"},
+      {"phoneme": "TW", "example": "twin"}
+    ]
+  }
+  
