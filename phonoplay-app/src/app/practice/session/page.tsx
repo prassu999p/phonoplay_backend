@@ -11,6 +11,8 @@ import { WordImage } from '@/lib/word-images/WordImageComponent';
 import { FiMic, FiStopCircle, FiVolume2 } from 'react-icons/fi';
 
 export default function PracticeSessionPage() {
+  // Add state for STT provider toggle
+  const [sttProvider, setSttProvider] = useState<'whisper' | 'elevenlabs'>('elevenlabs');
   const confettiRef = useRef(null);
   // --- All hooks at the top! ---
   const [currentIdx, setCurrentIdx] = useState(0);
@@ -44,6 +46,18 @@ export default function PracticeSessionPage() {
   // Update widget attributes whenever word or childName changes
   // (displayWord is defined after early returns, so we will handle this in the main render logic)
 
+  // Variables that hooks depend on - must be declared before hooks that use them
+  const total = sessionWords?.length || 0;
+  const currentWord = sessionWords ? sessionWords[currentIdx] : undefined;
+  // Defensive: fallback if LLMWordEntry fields are missing
+  // Use optional chaining and fallback for missing properties
+  const displayWord = currentWord ? ((currentWord as any).word || (currentWord as any).text || '') : '';
+  const displayPhonemes = currentWord ? ((currentWord as any).phonemes || []) : [];
+  const displayImagePath = currentWord ? ((currentWord as any).image_path || null) : null;
+
+  // Track the latest displayWord to avoid stale closure in callbacks
+  const displayWordRef = useRef(displayWord);
+  
   // useEffect: Load session words from localStorage
   React.useEffect(() => {
     try {
@@ -65,17 +79,14 @@ export default function PracticeSessionPage() {
       confettiRef.current.fire();
     }
   }, [feedback]);
-
-  const total = sessionWords?.length || 0;
-  const currentWord = sessionWords ? sessionWords[currentIdx] : undefined;
-  // Defensive: fallback if LLMWordEntry fields are missing
-  // Use optional chaining and fallback for missing properties
-  const displayWord = currentWord ? ((currentWord as any).word || (currentWord as any).text || '') : '';
-  const displayPhonemes = currentWord ? ((currentWord as any).phonemes || []) : [];
-  const displayImagePath = currentWord ? ((currentWord as any).image_path || null) : null;
-
-  // Track the latest displayWord to avoid stale closure in callbacks
-  const displayWordRef = useRef(displayWord);
+  
+  // Session completion effect
+  useEffect(() => {
+    if (currentIdx >= total && total > 0 && confettiRef.current) {
+      // @ts-ignore
+      confettiRef.current.fire();
+    }
+  }, [currentIdx, total]);
   useEffect(() => {
     displayWordRef.current = displayWord;
   }, [displayWord]);
@@ -144,19 +155,30 @@ export default function PracticeSessionPage() {
           const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/webm' });
           const url = URL.createObjectURL(audioBlob);
           setRecordedUrl(url);
-          // Send to Whisper API
+          // Send to selected STT API
           setFeedback(null);
           setTranscription(null);
           const formData = new FormData();
-          formData.append('audio', audioBlob, 'recording.webm');
+          if (sttProvider === 'elevenlabs') {
+            formData.append('file', audioBlob, 'recording.webm');
+            formData.append('language_code', 'eng');
+            formData.append('model_id', 'scribe_v1');
+          } else {
+            formData.append('audio', audioBlob, 'recording.webm');
+          }
+          const endpoint = sttProvider === 'elevenlabs'
+            ? '/api/elevenlabs-transcribe'
+            : '/api/whisper-transcribe';
           try {
-            const res = await fetch('/api/whisper-transcribe', {
+            const res = await fetch(endpoint, {
               method: 'POST',
               body: formData,
             });
             const data = await res.json();
-            if (data.text) {
-              setTranscription(data.text);
+            // ElevenLabs returns 'text', Whisper may return 'text' or 'transcription'
+            const transcript = data.text || data.transcription;
+            if (transcript) {
+              setTranscription(transcript);
               // Improved matching logic for kids: forgiving of punctuation, case, and extra words
               function normalize(str: string) {
                 return str
@@ -165,7 +187,7 @@ export default function PracticeSessionPage() {
                   .replace(/\s{2,}/g, " ") // Remove extra spaces
                   .trim();
               }
-              const heard = normalize(data.text);
+              const heard = normalize(transcript);
               const target = normalize(displayWordRef.current);
               if (
                 heard === target ||
@@ -174,7 +196,7 @@ export default function PracticeSessionPage() {
               ) {
                 setFeedback('Great job!');
               } else {
-                setFeedback(`Try again! I heard "${data.text}"`);
+                setFeedback(`Try again! I heard "${transcript}"`);
               }
             } else {
               setFeedback('Sorry, could not understand. Please try again.');
@@ -207,13 +229,7 @@ export default function PracticeSessionPage() {
   }
 
   // If finished all words, show session complete
-  if (currentIdx >= total) {
-    useEffect(() => {
-      if (currentIdx >= total && confettiRef.current) {
-        // @ts-ignore
-        confettiRef.current.fire();
-      }
-    }, [currentIdx, total]);
+  if (currentIdx >= total && total > 0) {
     return (
       <div className="relative min-h-screen flex flex-col items-center justify-center bg-white">
         <Confetti manualstart ref={confettiRef} className="absolute left-0 top-0 w-full h-full pointer-events-none z-50" />
@@ -249,6 +265,21 @@ export default function PracticeSessionPage() {
         </div>
         <div className="flex flex-col items-center mt-2 mb-8 w-full">
           <div className="mb-3 mt-2 text-2xl font-bold text-gray-800 text-center">Practice Time!</div>
+          
+          {/* STT Provider Toggle */}
+          <div className="flex gap-2 items-center mb-4">
+            <label htmlFor="stt-provider" className="font-medium text-gray-700">Speech Recognition:</label>
+            <select
+              id="stt-provider"
+              value={sttProvider}
+              onChange={e => setSttProvider(e.target.value as 'whisper' | 'elevenlabs')}
+              className="border rounded px-2 py-1 text-sm bg-white"
+            >
+              <option value="elevenlabs">ElevenLabs</option>
+              <option value="whisper">Whisper</option>
+            </select>
+          </div>
+          
           <div className="bg-gray-50 rounded-3xl shadow-lg px-8 py-10 flex flex-col items-center w-full max-w-xl">
             <div className="text-2xl font-bold text-gray-700 text-center mb-2" style={{ letterSpacing: 1 }}>{displayWord}</div>
             <div className="flex flex-col items-center mb-6 w-full">
