@@ -86,24 +86,52 @@ export default function PracticeSessionPage() {
     displayWordRef.current = displayWord;
   }, [displayWord]);
   
-  // Create ElevenLabs widget dynamically
+  // Create/Update ElevenLabs widget dynamically
   React.useEffect(() => {
-    if (!displayWord) return;
-    
-    // Only create if it doesn't already exist
-    if (!document.querySelector('elevenlabs-convai') && convaiRef.current) {
-      // Create the element
-      const convaiElement = document.createElement('elevenlabs-convai');
-      
-      // Set attributes
-      convaiElement.setAttribute('agent-id', 'agent_01jwkam9bke6msyrfezbhhbpf7');
-      convaiElement.setAttribute('dynamic-variables', JSON.stringify({ word: displayWord, child_name: childName }));
-      convaiElement.setAttribute('context', `Help ${childName} pronounce the word "${displayWord}". Listen and give friendly feedback. If the child struggles, guide them with encouragement and tips.`);
-      
-      // Append to container
-      convaiRef.current.appendChild(convaiElement);
+    const currentConvaiContainer = convaiRef.current;
+    if (!currentConvaiContainer) return; // No container, can't do anything
+
+    let convaiElement = currentConvaiContainer.querySelector('elevenlabs-convai') as HTMLElement | null;
+
+    if (!displayWord) {
+      // If no displayWord, ensure the widget is removed if it exists
+      if (convaiElement) {
+        try {
+          currentConvaiContainer.removeChild(convaiElement);
+        } catch (error) {
+          console.warn("Failed to remove convai widget when displayWord is null:", error);
+        }
+      }
+      return;
     }
-  }, [displayWord, childName]);
+
+    // If widget doesn't exist, create and append it
+    if (!convaiElement) {
+      convaiElement = document.createElement('elevenlabs-convai');
+      // Set agent-id only once during creation, if it's static
+      convaiElement.setAttribute('agent-id', 'agent_01jwkam9bke6msyrfezbhhbpf7');
+      currentConvaiContainer.appendChild(convaiElement);
+    }
+
+    // Always update dynamic variables and context as these can change with the word
+    convaiElement.setAttribute('dynamic-variables', JSON.stringify({ word: displayWord, child_name: childName }));
+    convaiElement.setAttribute('context', `Help ${childName} pronounce the word "${displayWord}". Listen and give friendly feedback. If the child struggles, guide them with encouragement and tips.`);
+
+    // Cleanup function for component unmount
+    return () => {
+      // This cleanup will run when the component unmounts.
+      // It attempts to remove the widget that might have been managed by this effect.
+      // Re-querying inside cleanup for robustness, as `convaiElement` might be stale.
+      const elementToRemove = currentConvaiContainer.querySelector('elevenlabs-convai');
+      if (elementToRemove) {
+        try {
+          currentConvaiContainer.removeChild(elementToRemove);
+        } catch (error) {
+          console.warn("Failed to remove convai widget on component unmount:", error);
+        }
+      }
+    };
+  }, [displayWord, childName]); // Re-run if displayWord or childName changes
   
   // Fetch words based on URL parameters
   React.useEffect(() => {

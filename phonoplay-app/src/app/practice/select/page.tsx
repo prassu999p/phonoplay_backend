@@ -107,7 +107,7 @@ export default function WordSelectionPage() {
       'CH','SH','TH','ST','PL','CL','DR','SW' // Add all your consonant blends/digraphs
     ];
     const SHORT_VOWELS = ['A','E','I','O','U'];
-    const LONG_VOWELS = ['Long A','Long E','Long I','Long O','Long U']; // Adjust if your DB uses different labels
+    const LONG_VOWELS = ['AY', 'EE', 'AI', 'OA', 'YU']; // Updated to match new DB identifiers
 
     const consonantPhonemes = selectedPhonemes.filter(p => CONSONANTS.includes(p));
     const shortVowelPhonemes = selectedPhonemes.filter(p => SHORT_VOWELS.includes(p));
