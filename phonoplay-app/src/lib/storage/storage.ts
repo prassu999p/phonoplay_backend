@@ -1,35 +1,26 @@
-import { createClient } from '@supabase/supabase-js';
+import { createClient, SupabaseClient } from '@supabase/supabase-js'; // Bucket type will be handled inline
 import { WordEntry } from '@/types/word';
 
-// Load environment variables
-require('dotenv').config({ path: '.env.local' });
+// Environment variables are typically handled by Next.js build process
+// and do not require dotenv in library code.
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+export const supabase: SupabaseClient = createClient(supabaseUrl, supabaseAnonKey); // Added SupabaseClient type
 
 // Make sure this matches exactly with the bucket name in Supabase
 const BUCKET_NAME = 'phonic-images';
 
-// Debug function to list all buckets
-async function listAllBuckets() {
-  console.log('🔍 Listing all buckets...');
-  const { data: buckets, error } = await supabase.storage.listBuckets();
-  
-  if (error) {
-    console.error('❌ Error listing buckets:', error);
-    return [];
-  }
-  
-  console.log('📦 Available buckets:', buckets?.map(b => b.name).join(', ') || 'None');
-  return buckets || [];
-}
+// listAllBuckets function removed as it was unused.
 
 /**
  * Uploads a file to Supabase Storage
  */
-export const uploadFile = async (filePath: string, file: File): Promise<{ data: any; error: any }> => {
+export const uploadFile = async (
+  filePath: string, 
+  file: File
+): Promise<{ data: { path: string; publicUrl?: string } | null; error: Error | null }> => {
   console.log(`📤 Attempting to upload ${filePath} to bucket '${BUCKET_NAME}'`);
   
   try {
@@ -42,10 +33,10 @@ export const uploadFile = async (filePath: string, file: File): Promise<{ data: 
       return { data: null, error: listError };
     }
     
-    console.log('📦 Available buckets:', buckets?.map((b: any) => b.name).join(', ') || 'None');
+    console.log('📦 Available buckets:', buckets?.map((b: { name: string }) => b.name).join(', ') || 'None');
     
-    if (!buckets?.some((b: any) => b.name === BUCKET_NAME)) {
-      const errorMsg = `Bucket '${BUCKET_NAME}' does not exist. Available buckets: ${buckets?.map((b: any) => b.name).join(', ') || 'None'}`;
+    if (!buckets?.some((b: { name: string }) => b.name === BUCKET_NAME)) {
+      const errorMsg = `Bucket '${BUCKET_NAME}' does not exist. Available buckets: ${buckets?.map((b: { name: string }) => b.name).join(', ') || 'None'}`;
       console.error(`❌ ${errorMsg}`);
       return { data: null, error: new Error(errorMsg) };
     }
@@ -102,7 +93,7 @@ export const uploadFile = async (filePath: string, file: File): Promise<{ data: 
     
   } catch (error) {
     console.error(`❌ Exception while uploading ${filePath}:`, error);
-    return { data: null, error };
+    return { data: null, error: error instanceof Error ? error : new Error(String(error)) };
   }
 };
 

@@ -26,7 +26,7 @@ export async function POST(req: NextRequest) {
       headers: {
         'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`
       },
-      body: whisperForm as any, // TS workaround
+      body: whisperForm,
     });
 
     if (!openaiRes.ok) {
@@ -36,7 +36,11 @@ export async function POST(req: NextRequest) {
 
     const data = await openaiRes.json();
     return NextResponse.json(data); // { text: "transcribed text" }
-  } catch (err: any) {
-    return NextResponse.json({ error: err.message || 'Unknown error' }, { status: 500 });
+  } catch (err: unknown) {
+    let errorMessage = 'Unknown error';
+    if (err instanceof Error) {
+      errorMessage = err.message;
+    }
+    return NextResponse.json({ error: errorMessage }, { status: 500 });
   }
 }

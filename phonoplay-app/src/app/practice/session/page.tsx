@@ -2,34 +2,59 @@
 // Practice Session Screen
 // This page displays words one at a time for practice, with navigation and (future) recording.
 
-import React, { useState, useRef, useEffect } from 'react';
-
+import * as React from 'react';
+// import Image from 'next/image'; // Unused
+// import { Button } from '@/components/ui/button'; // Unused
+import createClientBrowser from '@/utils/supabase/client';
 import { Confetti } from '@/components/ui/confetti';
-import { allWords, Word } from '@/lib/word-utils';
-import { WordCard } from '@/components/words/WordCard';
+import { Word } from '@/lib/word-utils'; // allWords removed as unused
+// import { WordCard } from '@/components/words/WordCard'; // Unused
 import { WordImage } from '@/lib/word-images/WordImageComponent';
 import { FiMic, FiStopCircle, FiVolume2 } from 'react-icons/fi';
 
+// We'll use React.createElement for custom elements to avoid TypeScript errors
+
+// Debug function to log important information clearly
+function debugLog(message: string, data: unknown) { // Changed data type from any to unknown
+  console.log(`%c${message}`, 'background: #222; color: #bada55', data);
+}
+
+// Unused PHONEMES, SHORT_VOWELS, LONG_VOWELS definitions removed.
+
 export default function PracticeSessionPage() {
-  // Add state for STT provider toggle
-  const [sttProvider, setSttProvider] = useState<'whisper' | 'elevenlabs'>('elevenlabs');
-  const confettiRef = useRef(null);
-  // --- All hooks at the top! ---
-  const [currentIdx, setCurrentIdx] = useState(0);
-  const [sessionWords, setSessionWords] = useState<Word[] | null>(null);
-  const [error, setError] = useState<string | null>(null);
-  const [audioUrl, setAudioUrl] = useState<string | null>(null);
-  const [audioLoading, setAudioLoading] = useState(false);
-  const [audioError, setAudioError] = useState<string | null>(null);
-  const [isRecording, setIsRecording] = useState(false);
-  const [recordedUrl, setRecordedUrl] = useState<string | null>(null);
-  const [recordError, setRecordError] = useState<string | null>(null);
-  const [feedback, setFeedback] = useState<string | null>(null);
-  const [transcription, setTranscription] = useState<string | null>(null);
-  const [childName] = useState('Alex'); // Only declare once, at the top
+  // State management for practice session
+  const [currentWord, setCurrentWord] = React.useState<Word | null>(null);
+  const [currentIdx, setCurrentIdx] = React.useState(0);
+  const [sessionWords, setSessionWords] = React.useState<Word[] | null>(null);
+  const [loading, setLoading] = React.useState(true);
+  const [error, setError] = React.useState<string | null>(null);
+  
+  // Audio and recording state
+  const [audioUrl, setAudioUrl] = React.useState<string | null>(null);
+
+  // Keep currentWord in sync with currentIdx and sessionWords
+  React.useEffect(() => {
+    if (sessionWords && sessionWords.length > 0) {
+      setCurrentWord(sessionWords[currentIdx]);
+    }
+  }, [currentIdx, sessionWords]);
+  const [audioLoading, setAudioLoading] = React.useState(false);
+  // const [audioError, setAudioError] = React.useState<string | null>(null); // Unused variable
+  const [isRecording, setIsRecording] = React.useState(false);
+  const [recordedUrl, setRecordedUrl] = React.useState<string | null>(null);
+  const [recordError, setRecordError] = React.useState<string | null>(null);
+  const [feedback, setFeedback] = React.useState<string | null>(null);
+  // const [transcription, setTranscription] = React.useState<string | null>(null); // Unused variable
+  
+  // Configuration state
+  const [sttProvider, setSttProvider] = React.useState<'whisper' | 'elevenlabs'>('elevenlabs');
+  const [childName] = React.useState('Alex');
+  
+  // Refs
+  const confettiRef = React.useRef(null);
   const mediaRecorderRef = React.useRef<MediaRecorder | null>(null);
   const audioChunksRef = React.useRef<Blob[]>([]);
-  const convaiRef = React.useRef<any>(null); // Only declare once, at the top
+  const convaiRef = React.useRef<HTMLDivElement | null>(null);
 
   // Dynamically load the ElevenLabs Convai script once
   React.useEffect(() => {
@@ -46,48 +71,191 @@ export default function PracticeSessionPage() {
   // Update widget attributes whenever word or childName changes
   // (displayWord is defined after early returns, so we will handle this in the main render logic)
 
-  // Variables that hooks depend on - must be declared before hooks that use them
+  // Computed properties - derived from state
+  // These must be declared before the useEffect hooks that use them
   const total = sessionWords?.length || 0;
-  const currentWord = sessionWords ? sessionWords[currentIdx] : undefined;
-  // Defensive: fallback if LLMWordEntry fields are missing
-  // Use optional chaining and fallback for missing properties
-  const displayWord = currentWord ? ((currentWord as any).word || (currentWord as any).text || '') : '';
-  const displayPhonemes = currentWord ? ((currentWord as any).phonemes || []) : [];
-  const displayImagePath = currentWord ? ((currentWord as any).image_path || null) : null;
-
-  // Track the latest displayWord to avoid stale closure in callbacks
-  const displayWordRef = useRef(displayWord);
+  const displayWord = currentWord?.word || '';
+  // const displayPhonemes = currentWord?.phonemes || []; // displayPhonemes is unused
+  const displayImagePath = currentWord?.image_path || null;
   
-  // useEffect: Load session words from localStorage
+  // Reference to the latest word for callbacks
+  const displayWordRef = React.useRef(displayWord);
+  
+  // Update ref when displayWord changes
   React.useEffect(() => {
-    try {
-      const data = window.localStorage.getItem('phonoplay-session-words');
-      if (data) {
-        setSessionWords(JSON.parse(data));
-      } else {
-        setError('No practice session found. Please start a new session.');
-      }
-    } catch (e) {
-      setError('Failed to load session words.');
+    displayWordRef.current = displayWord;
+  }, [displayWord]);
+  
+  // Create ElevenLabs widget dynamically
+  React.useEffect(() => {
+    if (!displayWord) return;
+    
+    // Only create if it doesn't already exist
+    if (!document.querySelector('elevenlabs-convai') && convaiRef.current) {
+      // Create the element
+      const convaiElement = document.createElement('elevenlabs-convai');
+      
+      // Set attributes
+      convaiElement.setAttribute('agent-id', 'agent_01jwkam9bke6msyrfezbhhbpf7');
+      convaiElement.setAttribute('dynamic-variables', JSON.stringify({ word: displayWord, child_name: childName }));
+      convaiElement.setAttribute('context', `Help ${childName} pronounce the word "${displayWord}". Listen and give friendly feedback. If the child struggles, guide them with encouragement and tips.`);
+      
+      // Append to container
+      convaiRef.current.appendChild(convaiElement);
     }
-  }, []);
+  }, [displayWord, childName]);
+  
+  // Fetch words based on URL parameters
+  React.useEffect(() => {
+    // Get URL search params
+    const params = new URLSearchParams(window.location.search);
+    
+    async function fetchWords() {
+      try {
+        setError(null);
+        setLoading(true);
+        
+        // Parse URL parameters
+        const selectedPhonemes = params.get('phonemes')?.split(',') || [];
+        const selectedCategories = params.get('categories')?.split(',').filter(c => c !== '') || [];
+        const selectedSubcategories = params.get('subcategories')?.split(',').filter(c => c !== '') || [];
+        
+        // Display debug info
+        debugLog('URL Parameters:', {
+          phonemes: selectedPhonemes,
+          categories: selectedCategories,
+          subcategories: selectedSubcategories
+        });
+        
+        // Skip if no phonemes selected
+        if (!selectedPhonemes.length) {
+          setSessionWords([]);
+          setLoading(false);
+          return;
+        }
+        
+        console.log('Creating Supabase client...');
+        // Initialize Supabase client using singleton pattern
+        const supabase = createClientBrowser();
+        console.log('Supabase client created successfully');
+        
+        if (!supabase) {
+          throw new Error('Failed to initialize Supabase client');
+        }
+
+        // IMPORTANT NOTE: The SQL function uses the array overlap operator (&&)
+        // which means it returns words that contain ANY of the selected phonemes, not ALL of them.
+        // If we need to match ALL phonemes, we would need to filter the results client-side.
+        
+        // Set up parameters for RPC call
+        // Keep phonemes in lowercase to match database format
+        const rpcParams = {
+          p_limit: 20, // Increased limit to get more results for filtering
+          p_phonemes: selectedPhonemes.map((p: string) => p.toUpperCase()),
+          p_categories: selectedCategories.length > 0 ? selectedCategories.map((c: string) => c.toUpperCase()) : null,
+          p_subcategories: selectedSubcategories.length > 0 ? selectedSubcategories.map((s: string) => s.toUpperCase()) : null
+        };
+        
+        // Call the RPC function and log parameters
+        debugLog('Calling Supabase RPC with params:', rpcParams);
+        const { data, error } = await supabase.rpc('select_practice_words', rpcParams);
+        
+        // Log the response status and error (if any)
+        debugLog('RPC response:', {
+          status: 200,  // Assuming success for now
+          error: error,
+          dataLength: Array.isArray(data) ? data.length : 0
+        });
+        
+        if (error) {
+          throw new Error(`Error fetching words: ${error.message}`);
+        }
+        
+        // Cast data to Word[] to fix TypeScript errors
+        const wordsData = data as Word[];
+        
+        if (!wordsData || wordsData.length === 0) {
+          console.log('No words found');
+          setSessionWords([]);
+          setLoading(false);
+          return;
+        }
+        
+        // First, log all the words we got back for debugging
+        console.log('Words found from database:', wordsData.map((w: Word) => ({ word: w.word, phonemes: w.phonemes })));
+        
+        // Optional: Filter results client-side to match ALL phonemes instead of ANY
+        // This changes the behavior from the database's ANY match to ALL match
+        const filteredData = wordsData.filter((word: Word) => {
+          // Check if the word contains ALL selected phonemes (case-insensitive, but DB is uppercase)
+          const wordPhonemes = word.phonemes.map((p: string) => p.toUpperCase());
+          return selectedPhonemes.every((p: string) => 
+            wordPhonemes.includes(p.toUpperCase())
+          );
+        });
+        
+        // Log filtered results
+        console.log('Filtered words (containing ALL selected phonemes):', 
+          filteredData.map((w: Word) => ({ word: w.word, phonemes: w.phonemes }))
+        );
+        
+        // Choose which dataset to use (filtered or original)
+        // Uncomment the line below to use ANY phoneme matching (original database behavior)
+        // const finalWords = wordsData; 
+        
+        // Use this for ALL phoneme matching (more restrictive)
+        const finalWords = filteredData;
+        
+        if (finalWords.length === 0) {
+          console.log('No words found after filtering');
+          setSessionWords([]);
+          setLoading(false);
+          return;
+        }
+        
+        // Sort so words with images come first
+        const sortedWords = finalWords.slice().sort((a, b) => {
+          const aHasImage = !!a.image_path && a.image_path.trim() !== '';
+          const bHasImage = !!b.image_path && b.image_path.trim() !== '';
+          if (aHasImage && !bHasImage) return -1;
+          if (!aHasImage && bHasImage) return 1;
+          return 0;
+        });
+        
+        // Success - set the words and first word
+        setSessionWords(sortedWords);
+        setCurrentWord(sortedWords[0]);
+        setCurrentIdx(0);
+      } catch (err) {
+        console.error('Error fetching words:', err);
+        setError(`Failed to fetch words: ${err instanceof Error ? err.message : 'Unknown error'}`);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    // Call the fetchWords function
+    fetchWords();
+  }, []);  // Empty dependency array to run only once on mount
 
   // Confetti effect on correct answer
-  useEffect(() => {
+  React.useEffect(() => {
     if (feedback === 'Great job!' && confettiRef.current) {
-      // @ts-ignore
+      // @ts-expect-error TypeScript might not know about the .fire() method on the Confetti component ref
       confettiRef.current.fire();
     }
   }, [feedback]);
   
-  // Session completion effect
-  useEffect(() => {
+  // Confetti effect on completing all words
+  React.useEffect(() => {
     if (currentIdx >= total && total > 0 && confettiRef.current) {
-      // @ts-ignore
+      // @ts-expect-error TypeScript might not know about the .fire() method on the Confetti component ref
       confettiRef.current.fire();
     }
   }, [currentIdx, total]);
-  useEffect(() => {
+  
+  // Update display word reference
+  React.useEffect(() => {
     displayWordRef.current = displayWord;
   }, [displayWord]);
 
@@ -95,20 +263,20 @@ export default function PracticeSessionPage() {
   function goNext() {
     setCurrentIdx((idx) => idx + 1); // allow increment past last word to trigger session complete
     setFeedback(null);
-    setTranscription(null);
+    // setTranscription(null); // transcription is unused
     setRecordedUrl(null);
   }
   function goPrev() {
     setCurrentIdx((idx) => Math.max(idx - 1, 0));
     setFeedback(null);
-    setTranscription(null);
+    // setTranscription(null); // transcription is unused
     setRecordedUrl(null);
   }
 
   // Play TTS audio for the current word
   async function handleReplay() {
     setAudioLoading(true);
-    setAudioError(null);
+    // setAudioError(null); // audioError is unused
     setAudioUrl(null);
     try {
       const res = await fetch('/api/tts-elevenlabs', {
@@ -120,10 +288,10 @@ export default function PracticeSessionPage() {
       if (data.audio_url) {
         setAudioUrl(data.audio_url);
       } else {
-        setAudioError('No audio returned.');
+        // setAudioError('No audio returned.'); 
       }
-    } catch (e) {
-      setAudioError('Failed to fetch audio.');
+    } catch {
+      // setAudioError('Failed to fetch audio.'); 
     } finally {
       setAudioLoading(false);
     }
@@ -142,7 +310,7 @@ export default function PracticeSessionPage() {
         mediaRecorderRef.current = mediaRecorder;
         audioChunksRef.current = [];
         setFeedback(null);
-        setTranscription(null);
+        // setTranscription(null); // transcription is unused
         setRecordedUrl(null); // Clear previous recording
         // When data is available, push it to our array
         mediaRecorder.ondataavailable = (event) => {
@@ -157,7 +325,7 @@ export default function PracticeSessionPage() {
           setRecordedUrl(url);
           // Send to selected STT API
           setFeedback(null);
-          setTranscription(null);
+          // setTranscription(null); // transcription is unused
           const formData = new FormData();
           if (sttProvider === 'elevenlabs') {
             formData.append('file', audioBlob, 'recording.webm');
@@ -178,7 +346,7 @@ export default function PracticeSessionPage() {
             // ElevenLabs returns 'text', Whisper may return 'text' or 'transcription'
             const transcript = data.text || data.transcription;
             if (transcript) {
-              setTranscription(transcript);
+              // setTranscription(transcript); // transcription is unused
               // Improved matching logic for kids: forgiving of punctuation, case, and extra words
               function normalize(str: string) {
                 return str
@@ -201,7 +369,7 @@ export default function PracticeSessionPage() {
             } else {
               setFeedback('Sorry, could not understand. Please try again.');
             }
-          } catch (err) {
+          } catch {
             setFeedback('Error transcribing audio. Please try again.');
           }
         };
@@ -215,7 +383,7 @@ export default function PracticeSessionPage() {
             setIsRecording(false);
           }
         }, 3000);
-      } catch (err) {
+      } catch {
         setRecordError('Could not access microphone. Please allow permission.');
       }
     } else {
@@ -266,6 +434,11 @@ export default function PracticeSessionPage() {
         <div className="flex flex-col items-center mt-2 mb-8 w-full">
           <div className="mb-3 mt-2 text-2xl font-bold text-gray-800 text-center">Practice Time!</div>
           
+          {/* Status Messages */}
+          {loading && <p className="text-center text-gray-500">Loading words...</p>}
+          {error && <p className="text-center text-red-500">{error}</p>}
+          {!loading && !error && !currentWord && <p className="text-center text-gray-500">No words available. Please select different phonemes.</p>}
+          
           {/* STT Provider Toggle */}
           <div className="flex gap-2 items-center mb-4">
             <label htmlFor="stt-provider" className="font-medium text-gray-700">Speech Recognition:</label>
@@ -281,12 +454,24 @@ export default function PracticeSessionPage() {
           </div>
           
           <div className="bg-gray-50 rounded-3xl shadow-lg px-8 py-10 flex flex-col items-center w-full max-w-xl">
-            <div className="text-2xl font-bold text-gray-700 text-center mb-2" style={{ letterSpacing: 1 }}>{displayWord}</div>
-            <div className="flex flex-col items-center mb-6 w-full">
-              <div className="flex justify-center">
-                <WordImage image_path={displayImagePath} word={displayWord} className="w-40 h-40 object-cover rounded-full border-4 border-white shadow-md" />
+            {displayImagePath && !displayImagePath.includes('error') ? (
+              <div className="bg-gray-50 rounded-3xl shadow-lg px-8 py-10 flex flex-col items-center w-full max-w-xl min-h-[340px]">
+                <div className="text-6xl font-bold text-black mb-4 text-center">
+                  {displayWord}
+                </div>
+                <WordImage
+                  image_path={displayImagePath}
+                  word={displayWord}
+                  className="w-40 h-40 object-cover rounded-full border-4 border-white shadow-md mx-auto"
+                />
               </div>
-            </div>
+            ) : (
+              <div className="flex items-center justify-center w-full max-w-xl min-h-[340px]">
+                <div className="text-6xl font-bold text-black text-center w-full">
+                  {displayWord}
+                </div>
+              </div>
+            )}
           </div>
         </div>
         <div className="flex flex-row items-center justify-center gap-8 mb-6 w-full">
@@ -360,14 +545,7 @@ export default function PracticeSessionPage() {
       </main>
       {/* ElevenLabs Convai Widget for conversational feedback */}
       <div className="w-full flex flex-col items-center my-4">
-        <div>
-          <elevenlabs-convai
-            ref={convaiRef}
-            agent-id="agent_01jwkam9bke6msyrfezbhhbpf7"
-            dynamic-variables={JSON.stringify({ word: displayWord, child_name: childName })}
-            context={`Help ${childName} pronounce the word \"${displayWord}\". Listen and give friendly feedback. If the child struggles, guide them with encouragement and tips.`}
-          ></elevenlabs-convai>
-        </div>
+        <div id="elevenlabs-widget-container" ref={convaiRef}></div>
       </div>
       {/* Audio playback for recorded audio */}
       {recordedUrl && !isRecording && (

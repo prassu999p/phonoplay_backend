@@ -3,9 +3,10 @@
 // This page allows users to select phonemes and start a practice session with matching words.
 
 import React, { useState, useEffect } from 'react';
-import { getWordsByPhonemesLLM, LLMWordEntry } from '@/lib/llmWordSelector';
+
 import { getEmojiForExample } from './emojiMap';
 import { createClient } from '@supabase/supabase-js';
+import { useRouter } from 'next/navigation';
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -18,14 +19,14 @@ const supabase = createClient(
 
 // --- PhonemeChip Component ---
 // This component represents a selectable phoneme chip/button with icon, label, and checkbox
-const PHONEME_EMOJIS: Record<string, string> = {
-  'Aa': '😄🍎',
-  'Bb': '💚🦄',
-  'Cc': '⭐🐱',
-  'Ch': '🎵♦️',
-  'Sh': '⚡🐟',
-  'Th': '🟢👍',
-};
+
+interface PhonemeItem {
+  id: number; // Assuming 'id' is a field, adjust if not
+  phoneme: string;
+  group: string;
+  example: string;
+  // Add any other fields that are part of your phoneme records
+}
 
 function PhonemeChip({ phoneme, selected, onClick, example }: {
   phoneme: string;
@@ -52,6 +53,7 @@ function PhonemeChip({ phoneme, selected, onClick, example }: {
 // --- Main Page Component ---
 export default function WordSelectionPage() {
   // State for selected phonemes
+  // State for selected phonemes
   const [selectedPhonemes, setSelectedPhonemes] = useState<string[]>([]);
 
   // State for loading and error (only used when starting practice)
@@ -59,7 +61,7 @@ export default function WordSelectionPage() {
   const [error, setError] = useState<string | null>(null);
 
   // State for fetched phonemes
-  const [groupedPhonemes, setGroupedPhonemes] = useState<Record<string, any[]> | null>(null);
+  const [groupedPhonemes, setGroupedPhonemes] = useState<Record<string, PhonemeItem[]> | null>(null);
   const [fetchingPhonemes, setFetchingPhonemes] = useState(true);
 
   // Fetch phonemes from Supabase and group by 'group'
@@ -73,8 +75,8 @@ export default function WordSelectionPage() {
         return;
       }
       // Group by 'group' field
-      const grouped: Record<string, any[]> = {};
-      data.forEach((row) => {
+      const grouped: Record<string, PhonemeItem[]> = {};
+      (data as PhonemeItem[]).forEach((row: PhonemeItem) => {
         if (!grouped[row.group]) grouped[row.group] = [];
         grouped[row.group].push(row);
       });
@@ -85,7 +87,7 @@ export default function WordSelectionPage() {
   }, []);
 
   // Toggle phoneme selection
-  function togglePhoneme(phoneme: string) {
+  function togglePhoneme(phoneme: string) { // Removed category and subcategory parameters
     setSelectedPhonemes((prev) =>
       prev.includes(phoneme)
         ? prev.filter((p) => p !== phoneme)
@@ -95,24 +97,47 @@ export default function WordSelectionPage() {
 
   // Handler for starting practice: fetch words from LLM, save, and navigate
   // Uses Next.js router for navigation (App Router best practice)
-  const router = require('next/navigation').useRouter();
+  const router = useRouter();
+
+  // Helper: categorize selected phonemes
+  function splitSelections() {
+    // You may want to adjust these lists to match your DB and UI
+    const CONSONANTS = [
+      'B','C','D','F','G','H','J','K','L','M','N','P','Q','R','S','T','V','W','X','Y','Z',
+      'CH','SH','TH','ST','PL','CL','DR','SW' // Add all your consonant blends/digraphs
+    ];
+    const SHORT_VOWELS = ['A','E','I','O','U'];
+    const LONG_VOWELS = ['Long A','Long E','Long I','Long O','Long U']; // Adjust if your DB uses different labels
+
+    const consonantPhonemes = selectedPhonemes.filter(p => CONSONANTS.includes(p));
+    const shortVowelPhonemes = selectedPhonemes.filter(p => SHORT_VOWELS.includes(p));
+    const longVowelPhonemes = selectedPhonemes.filter(p => LONG_VOWELS.includes(p));
+    return { consonantPhonemes, shortVowelPhonemes, longVowelPhonemes };
+  }
 
   async function startPractice() {
     if (selectedPhonemes.length === 0) return;
     setLoading(true);
     setError(null);
     try {
-      // Fetch words only when user clicks Start Practice
-      const words = await getWordsByPhonemesLLM(selectedPhonemes);
-      if (!words || words.length === 0) {
-        setError('No words found for your selection.');
-        setLoading(false);
-        return;
+      const { consonantPhonemes, shortVowelPhonemes, longVowelPhonemes } = splitSelections();
+      const params = new URLSearchParams();
+      // Always include consonants
+      consonantPhonemes.forEach(p => params.append('phonemes', p));
+      // Always include short vowels (if selected)
+      shortVowelPhonemes.forEach(p => params.append('phonemes', p));
+      // Only include long vowels if selected
+      if (longVowelPhonemes.length > 0) {
+        longVowelPhonemes.forEach(p => params.append('phonemes', p));
       }
-      window.localStorage.setItem('phonoplay-session-words', JSON.stringify(words));
-      router.push('/practice/session');
-    } catch (e: any) {
-      setError(e.message || 'Failed to fetch words.');
+      // Categories/subcategories filtering removed as state variables were removed
+      router.push(`/practice/session?${params.toString()}`);
+    } catch (e: unknown) {
+      let errorMessage = 'Failed to start practice.';
+      if (e instanceof Error) {
+        errorMessage = e.message;
+      }
+      setError(errorMessage);
       setLoading(false);
     }
   }
@@ -139,12 +164,12 @@ export default function WordSelectionPage() {
             <div key={group} className="mb-6 w-full">
               <h3 className="text-lg font-semibold mb-2 capitalize text-gray-700">{group.replace('_', ' ')}</h3>
               <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-                {(phonemeList as any[]).map((item) => (
+                {phonemeList.map((item: PhonemeItem) => (
                   <PhonemeChip
                     key={item.phoneme}
                     phoneme={item.phoneme}
                     selected={selectedPhonemes.includes(item.phoneme)}
-                    onClick={togglePhoneme}
+                    onClick={() => togglePhoneme(item.phoneme)} // Removed category/subcategory args
                     example={item.example}
                   />
                 ))}
