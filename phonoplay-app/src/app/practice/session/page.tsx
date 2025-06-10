@@ -2,31 +2,61 @@
 // Practice Session Screen
 // This page displays words one at a time for practice, with navigation and (future) recording.
 
-import React, { useState, useRef, useEffect } from 'react';
-
+import * as React from 'react';
+// import Image from 'next/image'; // Unused
+// import { Button } from '@/components/ui/button'; // Unused
+import createClientBrowser from '@/utils/supabase/client';
 import { Confetti } from '@/components/ui/confetti';
-import { Word } from '@/lib/word-utils';
+import { Word } from '@/lib/word-utils'; // allWords removed as unused
+// import { WordCard } from '@/components/words/WordCard'; // Unused
 import { WordImage } from '@/lib/word-images/WordImageComponent';
 import { FiMic, FiStopCircle, FiVolume2 } from 'react-icons/fi';
 
+// We'll use React.createElement for custom elements to avoid TypeScript errors
+
+// Debug function to log important information clearly
+function debugLog(message: string, data: unknown) { // Changed data type from any to unknown
+  console.log(`%c${message}`, 'background: #222; color: #bada55', data);
+}
+
+// Unused PHONEMES, SHORT_VOWELS, LONG_VOWELS definitions removed.
+
 export default function PracticeSessionPage() {
-  const confettiRef = useRef<{ fire: () => void } | null>(null);
-  // --- All hooks at the top! ---
-  const [currentIdx, setCurrentIdx] = useState(0);
-  const [sessionWords, setSessionWords] = useState<Word[] | null>(null);
-  const [error, setError] = useState<string | null>(null);
-  const [audioUrl, setAudioUrl] = useState<string | null>(null);
-  const [audioLoading, setAudioLoading] = useState(false);
-  const [audioError, setAudioError] = useState<string | null>(null);
-  const [isRecording, setIsRecording] = useState(false);
-  const [recordedUrl, setRecordedUrl] = useState<string | null>(null);
-  const [recordError, setRecordError] = useState<string | null>(null);
-  const [feedback, setFeedback] = useState<string | null>(null);
-  const [transcription, setTranscription] = useState<string | null>(null);
-  const [childName] = useState('Alex'); // Only declare once, at the top
+  // State management for practice session
+  const [currentWord, setCurrentWord] = React.useState<Word | null>(null);
+  const [currentIdx, setCurrentIdx] = React.useState(0);
+  const [sessionWords, setSessionWords] = React.useState<Word[] | null>(null);
+  const [loading, setLoading] = React.useState(true);
+  const [error, setError] = React.useState<string | null>(null);
+  
+  // Audio and recording state
+  const [audioUrl, setAudioUrl] = React.useState<string | null>(null);
+
+  // Keep currentWord in sync with currentIdx and sessionWords
+  React.useEffect(() => {
+    if (sessionWords && sessionWords.length > 0) {
+      setCurrentWord(sessionWords[currentIdx]);
+    }
+  }, [currentIdx, sessionWords]);
+  const [audioLoading, setAudioLoading] = React.useState(false);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [audioError, setAudioError] = React.useState<string | null>(null);
+  const [isRecording, setIsRecording] = React.useState(false);
+  const [recordedUrl, setRecordedUrl] = React.useState<string | null>(null);
+  const [recordError, setRecordError] = React.useState<string | null>(null);
+  const [feedback, setFeedback] = React.useState<string | null>(null);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [transcription, setTranscription] = React.useState<string | null>(null);
+  
+  // Configuration state
+  const [sttProvider, setSttProvider] = React.useState<'whisper' | 'elevenlabs'>('elevenlabs');
+  const [childName] = React.useState('Alex');
+  
+  // Refs
+  const confettiRef = React.useRef(null);
   const mediaRecorderRef = React.useRef<MediaRecorder | null>(null);
   const audioChunksRef = React.useRef<Blob[]>([]);
-  const convaiRef = React.useRef<HTMLElement | null>(null); // Only declare once, at the top
+  const convaiRef = React.useRef<HTMLDivElement | null>(null);
 
   // Dynamically load the ElevenLabs Convai script once
   React.useEffect(() => {
@@ -43,49 +73,219 @@ export default function PracticeSessionPage() {
   // Update widget attributes whenever word or childName changes
   // (displayWord is defined after early returns, so we will handle this in the main render logic)
 
-  // useEffect: Load session words from localStorage
+  // Computed properties - derived from state
+  // These must be declared before the useEffect hooks that use them
+  const total = sessionWords?.length || 0;
+  const displayWord = currentWord?.word || '';
+  // const displayPhonemes = currentWord?.phonemes || []; // displayPhonemes is unused
+  const displayImagePath = currentWord?.image_path || null;
+  
+  // Reference to the latest word for callbacks
+  const displayWordRef = React.useRef(displayWord);
+  
+  // Update ref when displayWord changes
   React.useEffect(() => {
-    try {
-      const data = window.localStorage.getItem('phonoplay-session-words');
-      if (data) {
-        setSessionWords(JSON.parse(data));
-      } else {
-        setError('No practice session found. Please start a new session.');
+    displayWordRef.current = displayWord;
+  }, [displayWord]);
+  
+  // Create/Update ElevenLabs widget dynamically
+  React.useEffect(() => {
+    const currentConvaiContainer = convaiRef.current;
+    if (!currentConvaiContainer) return; // No container, can't do anything
+
+    let convaiElement = currentConvaiContainer.querySelector('elevenlabs-convai') as HTMLElement | null;
+
+    if (!displayWord) {
+      // If no displayWord, ensure the widget is removed if it exists
+      if (convaiElement) {
+        try {
+          currentConvaiContainer.removeChild(convaiElement);
+        } catch (error) {
+          console.warn("Failed to remove convai widget when displayWord is null:", error);
+        }
       }
-    } catch (e) {
-      setError(`Failed to load session words: ${e instanceof Error ? e.message : String(e)}`);
+      return;
     }
-  }, []);
+
+    // If widget doesn't exist, create and append it
+    if (!convaiElement) {
+      convaiElement = document.createElement('elevenlabs-convai');
+      // Set agent-id only once during creation, if it's static
+      convaiElement.setAttribute('agent-id', 'agent_01jwkam9bke6msyrfezbhhbpf7');
+      currentConvaiContainer.appendChild(convaiElement);
+    }
+
+    // Always update dynamic variables and context as these can change with the word
+    convaiElement.setAttribute('dynamic-variables', JSON.stringify({ word: displayWord, child_name: childName }));
+    convaiElement.setAttribute('context', `Help ${childName} pronounce the word "${displayWord}". Listen and give friendly feedback. If the child struggles, guide them with encouragement and tips.`);
+
+    // Cleanup function for component unmount
+    return () => {
+      // This cleanup will run when the component unmounts.
+      // It attempts to remove the widget that might have been managed by this effect.
+      // Re-querying inside cleanup for robustness, as `convaiElement` might be stale.
+      const elementToRemove = currentConvaiContainer.querySelector('elevenlabs-convai');
+      if (elementToRemove) {
+        try {
+          currentConvaiContainer.removeChild(elementToRemove);
+        } catch (error) {
+          console.warn("Failed to remove convai widget on component unmount:", error);
+        }
+      }
+    };
+  }, [displayWord, childName]); // Re-run if displayWord or childName changes
+  
+  // Fetch words based on URL parameters
+  React.useEffect(() => {
+    // Get URL search params
+    const params = new URLSearchParams(window.location.search);
+    
+    async function fetchWords() {
+      try {
+        setError(null);
+        setLoading(true);
+        
+        // Parse URL parameters
+        const selectedPhonemes = params.get('phonemes')?.split(',') || [];
+        const selectedCategories = params.get('categories')?.split(',').filter(c => c !== '') || [];
+        const selectedSubcategories = params.get('subcategories')?.split(',').filter(c => c !== '') || [];
+        
+        // Display debug info
+        debugLog('URL Parameters:', {
+          phonemes: selectedPhonemes,
+          categories: selectedCategories,
+          subcategories: selectedSubcategories
+        });
+        
+        // Skip if no phonemes selected
+        if (!selectedPhonemes.length) {
+          setSessionWords([]);
+          setLoading(false);
+          return;
+        }
+        
+        console.log('Creating Supabase client...');
+        // Initialize Supabase client using singleton pattern
+        const supabase = createClientBrowser();
+        console.log('Supabase client created successfully');
+        
+        if (!supabase) {
+          throw new Error('Failed to initialize Supabase client');
+        }
+
+        // IMPORTANT NOTE: The SQL function uses the array overlap operator (&&)
+        // which means it returns words that contain ANY of the selected phonemes, not ALL of them.
+        // If we need to match ALL phonemes, we would need to filter the results client-side.
+        
+        // Set up parameters for RPC call
+        // Keep phonemes in lowercase to match database format
+        const rpcParams = {
+          p_limit: 20, // Increased limit to get more results for filtering
+          p_phonemes: selectedPhonemes.map((p: string) => p.toUpperCase()),
+          p_categories: selectedCategories.length > 0 ? selectedCategories.map((c: string) => c.toUpperCase()) : null,
+          p_subcategories: selectedSubcategories.length > 0 ? selectedSubcategories.map((s: string) => s.toUpperCase()) : null
+        };
+        
+        // Call the RPC function and log parameters
+        debugLog('Calling Supabase RPC with params:', rpcParams);
+        const { data, error } = await supabase.rpc('select_practice_words', rpcParams);
+        
+        // Log the response status and error (if any)
+        debugLog('RPC response:', {
+          status: 200,  // Assuming success for now
+          error: error,
+          dataLength: Array.isArray(data) ? data.length : 0
+        });
+        
+        if (error) {
+          throw new Error(`Error fetching words: ${error.message}`);
+        }
+        
+        // Cast data to Word[] to fix TypeScript errors
+        const wordsData = data as Word[];
+        
+        if (!wordsData || wordsData.length === 0) {
+          console.log('No words found');
+          setSessionWords([]);
+          setLoading(false);
+          return;
+        }
+        
+        // First, log all the words we got back for debugging
+        console.log('Words found from database:', wordsData.map((w: Word) => ({ word: w.word, phonemes: w.phonemes })));
+        
+        // Optional: Filter results client-side to match ALL phonemes instead of ANY
+        // This changes the behavior from the database's ANY match to ALL match
+        const filteredData = wordsData.filter((word: Word) => {
+          // Check if the word contains ALL selected phonemes (case-insensitive, but DB is uppercase)
+          const wordPhonemes = word.phonemes.map((p: string) => p.toUpperCase());
+          return selectedPhonemes.every((p: string) => 
+            wordPhonemes.includes(p.toUpperCase())
+          );
+        });
+        
+        // Log filtered results
+        console.log('Filtered words (containing ALL selected phonemes):', 
+          filteredData.map((w: Word) => ({ word: w.word, phonemes: w.phonemes }))
+        );
+        
+        // Choose which dataset to use (filtered or original)
+        // Uncomment the line below to use ANY phoneme matching (original database behavior)
+        // const finalWords = wordsData; 
+        
+        // Use this for ALL phoneme matching (more restrictive)
+        const finalWords = filteredData;
+        
+        if (finalWords.length === 0) {
+          console.log('No words found after filtering');
+          setSessionWords([]);
+          setLoading(false);
+          return;
+        }
+        
+        // Sort so words with images come first
+        const sortedWords = finalWords.slice().sort((a, b) => {
+          const aHasImage = !!a.image_path && a.image_path.trim() !== '';
+          const bHasImage = !!b.image_path && b.image_path.trim() !== '';
+          if (aHasImage && !bHasImage) return -1;
+          if (!aHasImage && bHasImage) return 1;
+          return 0;
+        });
+        
+        // Success - set the words and first word
+        setSessionWords(sortedWords);
+        setCurrentWord(sortedWords[0]);
+        setCurrentIdx(0);
+      } catch (err) {
+        console.error('Error fetching words:', err);
+        setError(`Failed to fetch words: ${err instanceof Error ? err.message : 'Unknown error'}`);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    // Call the fetchWords function
+    fetchWords();
+  }, []);  // Empty dependency array to run only once on mount
 
   // Confetti effect on correct answer
-  useEffect(() => {
+  React.useEffect(() => {
     if (feedback === 'Great job!' && confettiRef.current) {
+      // @ts-expect-error TypeScript might not know about the .fire() method on the Confetti component ref
       confettiRef.current.fire();
     }
   }, [feedback]);
-
-  // Effect for session completion confetti
-  useEffect(() => {
-    if (sessionWords && currentIdx >= sessionWords.length && sessionWords.length > 0 && confettiRef.current) {
+  
+  // Confetti effect on completing all words
+  React.useEffect(() => {
+    if (currentIdx >= total && total > 0 && confettiRef.current) {
+      // @ts-expect-error TypeScript might not know about the .fire() method on the Confetti component ref
       confettiRef.current.fire();
     }
-  }, [currentIdx, sessionWords]); // Depends on currentIdx and sessionWords to re-evaluate
-
-  const total = sessionWords?.length || 0;
-  const currentWord = sessionWords ? sessionWords[currentIdx] : undefined;
-  // Log current word for debugging
-  console.log('Current word:', currentWord);
+  }, [currentIdx, total]);
   
-  // Defensive: fallback if Word fields are missing
-  // FIXED: Use the correct property name 'word' instead of 'text'
-  const displayWord = currentWord?.word || '';
-  
-  // FIXED: Use the image_path from the word object if available
-  const displayImagePath = currentWord?.image_path;
-
-  // Track the latest displayWord to avoid stale closure in callbacks
-  const displayWordRef = useRef(displayWord);
-  useEffect(() => {
+  // Update display word reference
+  React.useEffect(() => {
     displayWordRef.current = displayWord;
   }, [displayWord]);
 
@@ -93,20 +293,20 @@ export default function PracticeSessionPage() {
   function goNext() {
     setCurrentIdx((idx) => idx + 1); 
     setFeedback(null);
-    setTranscription(null);
+    // setTranscription(null); // transcription is unused
     setRecordedUrl(null);
   }
   function goPrev() {
     setCurrentIdx((idx) => Math.max(idx - 1, 0));
     setFeedback(null);
-    setTranscription(null);
+    // setTranscription(null); // transcription is unused
     setRecordedUrl(null);
   }
 
   // Play TTS audio for the current word
   async function handleReplay() {
     setAudioLoading(true);
-    setAudioError(null);
+    // setAudioError(null); // audioError is unused
     setAudioUrl(null);
     try {
       const res = await fetch('/api/tts-elevenlabs', {
@@ -118,10 +318,10 @@ export default function PracticeSessionPage() {
       if (data.audio_url) {
         setAudioUrl(data.audio_url);
       } else {
-        setAudioError('No audio returned.');
+        // setAudioError('No audio returned.'); 
       }
-    } catch (e) {
-      setAudioError(`Failed to fetch audio: ${e instanceof Error ? e.message : String(e)}`);
+    } catch {
+      // setAudioError('Failed to fetch audio.'); 
     } finally {
       setAudioLoading(false);
     }
@@ -140,8 +340,8 @@ export default function PracticeSessionPage() {
         mediaRecorderRef.current = mediaRecorder;
         audioChunksRef.current = [];
         setFeedback(null);
-        setTranscription(null);
-        setRecordedUrl(null); 
+        // setTranscription(null); // transcription is unused
+        setRecordedUrl(null); // Clear previous recording
         // When data is available, push it to our array
         mediaRecorder.ondataavailable = (event) => {
           if (event.data.size > 0) {
@@ -153,19 +353,31 @@ export default function PracticeSessionPage() {
           const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/webm' });
           const url = URL.createObjectURL(audioBlob);
           setRecordedUrl(url);
-          // Send to Whisper API
+          // Send to selected STT API
           setFeedback(null);
-          setTranscription(null);
+          // setTranscription(null); // transcription is unused
           const formData = new FormData();
-          formData.append('audio', audioBlob, 'recording.webm');
+          if (sttProvider === 'elevenlabs') {
+            formData.append('file', audioBlob, 'recording.webm');
+            formData.append('language_code', 'eng');
+            formData.append('model_id', 'scribe_v1');
+          } else {
+            formData.append('audio', audioBlob, 'recording.webm');
+          }
+          const endpoint = sttProvider === 'elevenlabs'
+            ? '/api/elevenlabs-transcribe'
+            : '/api/whisper-transcribe';
           try {
-            const res = await fetch('/api/whisper-transcribe', {
+            const res = await fetch(endpoint, {
               method: 'POST',
               body: formData,
             });
             const data = await res.json();
-            if (data.text) {
-              setTranscription(data.text);
+            // ElevenLabs returns 'text', Whisper may return 'text' or 'transcription'
+            const transcript = data.text || data.transcription;
+            if (transcript) {
+              // setTranscription(transcript); // transcription is unused
+              // Improved matching logic for kids: forgiving of punctuation, case, and extra words
               function normalize(str: string) {
                 return str
                   .toLowerCase()
@@ -173,7 +385,7 @@ export default function PracticeSessionPage() {
                   .replace(/\s{2,}/g, " ") 
                   .trim();
               }
-              const heard = normalize(data.text);
+              const heard = normalize(transcript);
               const target = normalize(displayWordRef.current);
               if (
                 heard === target ||
@@ -182,13 +394,13 @@ export default function PracticeSessionPage() {
               ) {
                 setFeedback('Great job!');
               } else {
-                setFeedback(`Try again! I heard "${data.text}"`);
+                setFeedback(`Try again! I heard "${transcript}"`);
               }
             } else {
               setFeedback('Sorry, could not understand. Please try again.');
             }
-          } catch (err) {
-            setFeedback(`Error transcribing audio: ${err instanceof Error ? err.message : String(err)}. Please try again.`);
+          } catch {
+            setFeedback('Error transcribing audio. Please try again.');
           }
         };
         // Start recording!
@@ -201,8 +413,8 @@ export default function PracticeSessionPage() {
             setIsRecording(false);
           }
         }, 3000);
-      } catch (err) {
-        setRecordError(`Could not access microphone: ${err instanceof Error ? err.message : String(err)}. Please allow permission.`);
+      } catch {
+        setRecordError('Could not access microphone. Please allow permission.');
       }
     } else {
       // Manual stop (should rarely be needed)
@@ -214,24 +426,8 @@ export default function PracticeSessionPage() {
     }
   }
 
-  // --- Conditional Rendering Logic ---
-
-  // 1. Handle general errors
-  if (error) {
-    return <div className="text-red-500 p-4 text-center">Error: {error}</div>;
-  }
-
-  // 2. Handle loading state or no session words
-  if (!sessionWords) {
-    return <div className="p-4 text-center">Loading session...</div>;
-  }
-  if (sessionWords.length === 0) {
-    return <div className="p-4 text-center">No words in this session. Please select phonemes and start a new session.</div>;
-  }
-
-  // 3. Handle session completion
+  // If finished all words, show session complete
   if (currentIdx >= total && total > 0) {
-    // The useEffect for session completion confetti is now at the top level.
     return (
       <div className="relative min-h-screen flex flex-col items-center justify-center bg-white">
         <Confetti ref={confettiRef} manualstart className="absolute left-0 top-0 w-full h-full pointer-events-none z-50" />
@@ -275,13 +471,45 @@ export default function PracticeSessionPage() {
 
         <div className="flex flex-col items-center mt-2 mb-8 w-full">
           <div className="mb-3 mt-2 text-2xl font-bold text-gray-800 text-center">Practice Time!</div>
+          
+          {/* Status Messages */}
+          {loading && <p className="text-center text-gray-500">Loading words...</p>}
+          {error && <p className="text-center text-red-500">{error}</p>}
+          {!loading && !error && !currentWord && <p className="text-center text-gray-500">No words available. Please select different phonemes.</p>}
+          
+          {/* STT Provider Toggle */}
+          <div className="flex gap-2 items-center mb-4">
+            <label htmlFor="stt-provider" className="font-medium text-gray-700">Speech Recognition:</label>
+            <select
+              id="stt-provider"
+              value={sttProvider}
+              onChange={e => setSttProvider(e.target.value as 'whisper' | 'elevenlabs')}
+              className="border rounded px-2 py-1 text-sm bg-white"
+            >
+              <option value="elevenlabs">ElevenLabs</option>
+              <option value="whisper">Whisper</option>
+            </select>
+          </div>
+          
           <div className="bg-gray-50 rounded-3xl shadow-lg px-8 py-10 flex flex-col items-center w-full max-w-xl">
-            <div className="text-2xl font-bold text-gray-700 text-center mb-2" style={{ letterSpacing: 1 }}>{displayWord}</div>
-            <div className="flex flex-col items-center mb-6 w-full">
-              <div className="flex justify-center">
-                <WordImage image_path={displayImagePath} word={displayWord} className="w-40 h-40 object-cover rounded-full border-4 border-white shadow-md" />
+            {displayImagePath && !displayImagePath.includes('error') ? (
+              <div className="bg-gray-50 rounded-3xl shadow-lg px-8 py-10 flex flex-col items-center w-full max-w-xl min-h-[340px]">
+                <div className="text-6xl font-bold text-black mb-4 text-center">
+                  {displayWord}
+                </div>
+                <WordImage
+                  image_path={displayImagePath}
+                  word={displayWord}
+                  className="w-40 h-40 object-cover rounded-full border-4 border-white shadow-md mx-auto"
+                />
               </div>
-            </div>
+            ) : (
+              <div className="flex items-center justify-center w-full max-w-xl min-h-[340px]">
+                <div className="text-6xl font-bold text-black text-center w-full">
+                  {displayWord}
+                </div>
+              </div>
+            )}
           </div>
         </div>
 
@@ -360,14 +588,7 @@ export default function PracticeSessionPage() {
 
       {/* ElevenLabs Convai Widget for conversational feedback */}
       <div className="w-full flex flex-col items-center my-4">
-        <div>
-          <elevenlabs-convai
-            ref={convaiRef}
-            agent-id="agent_01jwkam9bke6msyrfezbhhbpf7"
-            dynamic-variables={JSON.stringify({ word: displayWord, child_name: childName })}
-            context={`Help ${childName} pronounce the word &quot;${displayWord}&quot;. Listen and give friendly feedback. If the child struggles, guide them with encouragement and tips.`}
-          ></elevenlabs-convai>
-        </div>
+        <div id="elevenlabs-widget-container" ref={convaiRef}></div>
       </div>
 
       {/* Audio playback for recorded audio */}

@@ -1,5 +1,5 @@
 import React from 'react';
-import Image from 'next/image';
+import Image from 'next/image'; // Import next/image
 import { wordImageMap } from '@/data/wordImageMap';
 
 interface WordImageProps {
@@ -21,22 +21,30 @@ export const WordImage: React.FC<WordImageProps> = ({ word, image_path, classNam
     imageUrl = cleanWord ? wordImageMap[cleanWord as keyof typeof wordImageMap] : undefined;
   }
 
-  if (!imageUrl) {
-    console.warn(`No image found for word:`, word, image_path);
-    return <div className={`w-20 h-20 flex items-center justify-center bg-gray-200 rounded text-gray-400 ${className}`}>No image</div>;
-  }
+  // Robust error handling: track image load error in state
+  const [imgError, setImgError] = React.useState(false);
+  React.useEffect(() => {
+    setImgError(false); // Reset error when image_path changes
+  }, [image_path]);
 
-  // onError is handled differently with next/image, or can use onLoadingComplete
-  // For simplicity, removing custom handleError for now.
+  const handleError = () => setImgError(true);
+
+  if (!imageUrl || imgError) {
+    // No image or failed to load, render nothing (no placeholder)
+    return null;
+  }
 
   return (
     <Image
       src={imageUrl}
       alt={word}
       className={`word-image ${className}`}
-      width={100} // Default width, adjust as needed
-      height={100} // Default height, adjust as needed
-      // onError could be implemented via onLoadingComplete or by checking if src is valid before rendering
+      onError={handleError}
+      width={100} // Placeholder width - adjust as needed
+      height={100} // Placeholder height - adjust as needed
+      // If you want the image to be responsive and scale with the container,
+      // you might need a different approach, e.g., style={{ objectFit: 'contain' }}
+      // or using the `fill` prop with a sized parent container.
     />
   );
 };
