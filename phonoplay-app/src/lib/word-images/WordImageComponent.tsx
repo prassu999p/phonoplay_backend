@@ -36,7 +36,6 @@ export const WordImage: React.FC<WordImageProps> = ({ word, image_path, classNam
 
   return (
     <Image
-    <Image
       src={imageUrl}
       alt={word}
       className={`word-image ${className}`}

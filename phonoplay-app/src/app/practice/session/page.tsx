@@ -39,12 +39,14 @@ export default function PracticeSessionPage() {
     }
   }, [currentIdx, sessionWords]);
   const [audioLoading, setAudioLoading] = React.useState(false);
-  // const [audioError, setAudioError] = React.useState<string | null>(null); // Unused variable
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [audioError, setAudioError] = React.useState<string | null>(null);
   const [isRecording, setIsRecording] = React.useState(false);
   const [recordedUrl, setRecordedUrl] = React.useState<string | null>(null);
   const [recordError, setRecordError] = React.useState<string | null>(null);
   const [feedback, setFeedback] = React.useState<string | null>(null);
-  // const [transcription, setTranscription] = React.useState<string | null>(null); // Unused variable
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [transcription, setTranscription] = React.useState<string | null>(null);
   
   // Configuration state
   const [sttProvider, setSttProvider] = React.useState<'whisper' | 'elevenlabs'>('elevenlabs');
