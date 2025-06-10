@@ -91,7 +91,7 @@ export const uploadFile = async (
       return { data, error: null }; // Still return success even if we couldn't get the URL
     }
     
-  } catch (error) {
+  } catch (error: unknown) {
     console.error(`❌ Exception while uploading ${filePath}:`, error);
     return { data: null, error: error instanceof Error ? error : new Error(String(error)) };
   }

@@ -289,7 +289,7 @@ export default function PracticeSessionPage() {
 
   // Handlers for navigation
   function goNext() {
-    setCurrentIdx((idx) => idx + 1); // allow increment past last word to trigger session complete
+    setCurrentIdx((idx) => idx + 1); 
     setFeedback(null);
     // setTranscription(null); // transcription is unused
     setRecordedUrl(null);
@@ -379,8 +379,8 @@ export default function PracticeSessionPage() {
               function normalize(str: string) {
                 return str
                   .toLowerCase()
-                  .replace(/[.,/#!$%^&*;:{}=\-_`~()\?\"]/g, "") // Remove punctuation
-                  .replace(/\s{2,}/g, " ") // Remove extra spaces
+                  .replace(/[.,/#!$%^&*;:{}=\-_`~()\?\"]/g, "") 
+                  .replace(/\s{2,}/g, " ") 
                   .trim();
               }
               const heard = normalize(transcript);
@@ -428,7 +428,7 @@ export default function PracticeSessionPage() {
   if (currentIdx >= total && total > 0) {
     return (
       <div className="relative min-h-screen flex flex-col items-center justify-center bg-white">
-        <Confetti manualstart ref={confettiRef} className="absolute left-0 top-0 w-full h-full pointer-events-none z-50" />
+        <Confetti ref={confettiRef} manualstart className="absolute left-0 top-0 w-full h-full pointer-events-none z-50" />
         <div className="relative z-10 flex flex-col items-center justify-center gap-8 p-8">
           <div className="text-3xl font-extrabold text-green-700 mb-2">Session Complete! 🎉</div>
           <div className="text-lg text-gray-700 mb-4">Great job practicing! You finished the session.</div>
@@ -444,21 +444,29 @@ export default function PracticeSessionPage() {
     );
   }
 
+  // 4. Main Practice UI
+  // Ensure currentWord is available before rendering main practice UI
   if (!currentWord) {
-    return <div className="p-6 text-center">No words available for practice.</div>;
+    return <div className="p-6 text-center">Loading word...</div>; // Or some other placeholder
   }
 
   return (
     <div className="relative min-h-screen w-full">
       <Confetti ref={confettiRef} manualstart className="absolute left-0 top-0 w-full h-full pointer-events-none z-50" />
-      <main className="min-h-screen flex flex-col items-center justify-center bg-white">
-        <div className="w-full max-w-xl mx-auto flex justify-between items-center px-4 pt-4">
-          <div />
-          {/* Placeholder for user avatar/menu */}
+      <main className="min-h-screen flex flex-col items-center justify-center bg-white px-4 py-8">
+        {/* Display general error if it exists (though handled by early return, good for robustness) */}
+        {/* {error && <p className="text-red-500 text-center mb-4">Error: {error}</p>} Already handled by early return */}
+
+        {/* Display audio error if it exists */}
+        {audioError && <p className="text-red-500 text-center mb-2">Audio Error: {audioError}</p>}
+
+        <div className="w-full max-w-xl mx-auto flex justify-between items-center pt-4">
+          <div /> {/* Placeholder for left side if needed */}
           <div className="flex items-center gap-2">
-            <span className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center text-gray-500 font-bold">?</span>
+            <span className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center text-gray-500 font-bold">?</span> {/* User avatar/menu placeholder */}
           </div>
         </div>
+
         <div className="flex flex-col items-center mt-2 mb-8 w-full">
           <div className="mb-3 mt-2 text-2xl font-bold text-gray-800 text-center">Practice Time!</div>
           
@@ -502,8 +510,9 @@ export default function PracticeSessionPage() {
             )}
           </div>
         </div>
+
         <div className="flex flex-row items-center justify-center gap-8 mb-6 w-full">
-          {/* Record Button with tooltip */}
+          {/* Record Button */}
           <div className="flex flex-col items-center group">
             <button
               className={`w-14 h-14 rounded-full flex items-center justify-center text-white text-3xl shadow transition-all duration-150 ${isRecording ? 'bg-pink-500 animate-pulse' : 'bg-pink-400 hover:bg-pink-500'}`}
@@ -513,10 +522,9 @@ export default function PracticeSessionPage() {
             >
               {isRecording ? <FiStopCircle /> : <FiMic />}
             </button>
-            {/* Tooltip */}
             <span className="mt-1 text-sm text-gray-600 group-hover:text-pink-500 transition-colors duration-150">Record</span>
           </div>
-          {/* Play/Listen Button with tooltip */}
+          {/* Play/Listen Button */}
           <div className="flex flex-col items-center group">
             <button
               className="w-14 h-14 rounded-full flex items-center justify-center bg-gray-200 hover:bg-gray-300 text-gray-700 text-3xl shadow"
@@ -527,12 +535,13 @@ export default function PracticeSessionPage() {
             >
               <FiVolume2 />
             </button>
-            {/* Tooltip */}
             <span className="mt-1 text-sm text-gray-600 group-hover:text-blue-500 transition-colors duration-150">Listen</span>
           </div>
         </div>
-        {/* Feedback Checkmark or Error */}
-        <div className="flex flex-col items-center mb-4">
+
+        {/* Transcription & Feedback Area */}
+        <div className="flex flex-col items-center mb-4 min-h-[60px]"> {/* Added min-height to prevent layout shift */}
+          {transcription && <p className="text-gray-600 text-lg mb-1 text-center">I heard: &quot;{transcription}&quot;</p>}
           {feedback && (
             <span className={`w-full flex flex-col items-center mb-2`}>
               {feedback === 'Great job!' ? (
@@ -544,16 +553,18 @@ export default function PracticeSessionPage() {
             </span>
           )}
           {recordError && (
-            <span className="text-red-500 text-sm mb-2">{recordError}</span>
+            <span className="text-red-500 text-sm mb-2 text-center">{recordError}</span>
           )}
         </div>
+
         {/* Progress Bar */}
         <div className="w-full max-w-xl mx-auto h-2 bg-gray-200 rounded-full overflow-hidden mb-8">
           <div
             className="h-full bg-pink-400 transition-all duration-500"
-            style={{ width: `${((currentIdx + 1) / total) * 100}%` }}
+            style={{ width: `${total > 0 ? ((currentIdx + 1) / total) * 100 : 0}%` }} // Avoid division by zero
           />
         </div>
+
         {/* Navigation Buttons */}
         <div className="flex justify-between w-full mt-4 gap-4 max-w-xl mx-auto">
           <button
@@ -566,27 +577,24 @@ export default function PracticeSessionPage() {
           <button
             className="px-6 py-3 rounded-lg bg-pink-500 text-white font-medium text-base shadow"
             onClick={goNext}
+            disabled={currentIdx >= total -1 && total > 0} // Disable if it's the last word
           >
             Next Word →
           </button>
         </div>
       </main>
+
       {/* ElevenLabs Convai Widget for conversational feedback */}
       <div className="w-full flex flex-col items-center my-4">
         <div id="elevenlabs-widget-container" ref={convaiRef}></div>
       </div>
+
       {/* Audio playback for recorded audio */}
       {recordedUrl && !isRecording && (
-        <audio src={recordedUrl} controls className="mt-2" />
+        <audio src={recordedUrl || undefined} controls className="mt-2" />
       )}
       {/* TTS playback (hidden, just triggers when needed) */}
-      {audioUrl && <audio src={audioUrl} autoPlay onEnded={() => setAudioUrl(null)} />}
+      {audioUrl && <audio src={audioUrl || undefined} autoPlay onEnded={() => setAudioUrl(null)} />}
     </div>
   );
 }
-
-// - Navigation buttons let you move through the list
-// - Record button is a stub for now
-// - Feedback area is a placeholder
-//
-// Next: connect to word selection, implement audio recording, and add feedback logic
